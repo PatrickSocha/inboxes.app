@@ -12,6 +12,18 @@
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous"></script>
     <script async src="https://cdn.splitbee.io/sb.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/exit-intent-popup@1.0.0/js/bioep.min.js"
+        integrety="sha256-oECLQ4rbPg+Q8R7BF8bOHeUWIwwt/jw6IL4lOaG3ahM="></script>
+    <script type="text/javascript">
+        bioEp.init({
+            width: 600,
+            height: 560,
+            delay: 3600 * 24,
+            showOncePerSession: false,
+            html: `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfjK9obBCEiszgWiqUSx8YoAm-VcvAXdWPNVqheh5InRBj-tg/viewform?usp=sf_link" width="100%" height="100%" scrolling="no"></iframe>`,
+            cookieExp: 0
+        });
+    </script>
 </head>
 
 <body>
@@ -25,8 +37,8 @@
                     </h1>
                     <p class="font-white">Create unlimited disposable emails. They're quick to make, quick to delete,
                         and they don't reveal anything about you.</p>
-                    <a class="button" href="#" data-splitbee-event="Join button"
-                        data-splitbee-event-type="View inbox">View inbox.</a>
+                    <a class="button" href="#" data-splitbee-event="Join button" data-splitbee-event-type="View inbox"
+                        onclick="bioEp.showPopup();">View inbox.</a>
                 </div>
             </div>
         </div>
@@ -36,12 +48,13 @@
         <div class="row">
             <div class="offset-by-six six columns push100">
                 <h2 class="font-white">
-                    Ciao bella.
+                    Ciao bella!
                 </h2>
                 <p class="font-white">Say goodbye to annoying companies. Once you've had enough, delete the email and
                     you'll never hear from them again.</p>
                 <a class="button" href="#" data-splitbee-event="Join button"
-                    data-splitbee-event-type="Create your first disposable email">Create your first disposable
+                    data-splitbee-event-type="Create your first disposable email" onclick="bioEp.showPopup();">Create
+                    your first disposable
                     email.</a>
             </div>
         </div>
@@ -54,7 +67,8 @@
                 <p class="font-white">That's a lot of emails <u>not</u> in your inbox. Not only that, companies sell
                     your email addresses and upload them to ad networks. No. Thank. You.</p>
                 <a class="button" href="#" data-splitbee-event="Join button"
-                    data-splitbee-event-type="Please stop tracking me">Please stop tracking me.</a>
+                    data-splitbee-event-type="Please stop tracking me" onclick="bioEp.showPopup();">Please stop tracking
+                    me.</a>
             </div>
         </div>
         <div class="row">
@@ -72,9 +86,10 @@
             <div class="offset-by-two eight columns push200 text-center CTA font-white">
                 <h2>Take back control of your inbox.</h2>
                 <p></p>
-                <a href="#" class="button" data-splitbee-event="Join button" data-splitbee-event-type="Sign up now">Sign
+                <a href="#" class="button" data-splitbee-event="Join button" data-splitbee-event-type="Sign up now"
+                    onclick="bioEp.showPopup();">Sign
                     up now and get your first 5 inboxes for free &raquo;</a><br />
-                <span style="color: rgba(255,255,255,.6)"><small>(No credit cards required)</small></span>
+                <!-- <span style="color: rgba(255,255,255,.6)"><small>(No credit cards required)</small></span> -->
             </div>
         </div>
         <!-- <div class="row">
