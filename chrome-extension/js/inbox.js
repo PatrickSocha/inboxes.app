@@ -11,13 +11,6 @@ chrome.storage.sync.get(["key"], function (result) {
     createAccount()
 });
 
-function run(key) {
-    getNewEmail(key)
-    getInbox(key)
-    getNews(key)
-    incrementAppUsageCounter()
-}
-
 function createAccount() {
     $.ajax({
         type: 'GET',
@@ -28,6 +21,13 @@ function createAccount() {
             run(data.key);
         }
     });
+}
+
+function run(key) {
+    getNewEmail(key)
+    getInbox(key)
+    getNews(key)
+    incrementAppUsageCounter()
 }
 
 async function getNewEmail(key) {
@@ -54,7 +54,7 @@ async function getInbox(key) {
         url: domain + '/get_inbox',
         dataType: 'json',
         success: function (data) {
-            if (data == null) {
+            if (data.length == 0) {
                 $('.inbox-zero').fadeIn(fadeTimer)
                 return
             }
