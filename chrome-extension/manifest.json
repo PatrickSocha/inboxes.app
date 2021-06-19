@@ -1,0 +1,44 @@
+{
+    "manifest_version": 2,
+    "name": "Inboxes: unlimited temporary email addresses",
+    "description": "Inboxes lets you quickly create & delete email addresses. Stop spammers & marketers in their tracks with disposable email addresses.",
+    "version": "0.0.1",
+    "homepage_url": "https://inboxes.app",
+    "icons": {
+        "128": "assets/128-128.png"
+    },
+    "browser_action": {
+        "default_icon": "assets/logo.png",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "storage",
+        "clipboardWrite"
+    ],
+    "background": {
+        "scripts": [
+            "js/jquery.min.js",
+            "js/background.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://api.inboxes.app/*"
+            ],
+            "css": [
+                "css/skeleton.min.css",
+                "css/style.css",
+                "css/icofont.css"
+            ],
+            "js": [
+                "js/jquery.min.js",
+                "js/inbox.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "webfonts/icofont.woff2",
+        "webfonts/icofont.woff"
+    ]
+}
