@@ -38,10 +38,6 @@ function setBadge(count) {
     }
 }
 
-// function setNumber(i) {
-//     chrome.storage.sync.set({ count: i });
-// }
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.get(['dec'], function (result) {
         setBadge(result.dec - request.counter)

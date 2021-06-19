@@ -144,7 +144,6 @@ function closeEmail() {
     $('#message-container').fadeOut(fadeTimer)
     $('#list').delay(100).fadeIn(fadeTimer)
     $('#iframe').css("height", "0px")
-    // chrome.runtime.sendMessage({ dec: 1 });
 }
 
 $(document).ready(function () {
@@ -153,7 +152,6 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $("#emailForm").click(copyEmailAddress);
-    // $(".tooltip").mouseout(outFunc)
 });
 
 
