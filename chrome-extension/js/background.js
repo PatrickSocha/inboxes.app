@@ -1,13 +1,12 @@
 var domain = "https://api.inboxes.app";
 
-chrome.storage.sync.get(['key'], function (result) {
-    if (result.key) {
-        getUnreadEmailCount(result.key)
-        setInterval(function () {
+setInterval(function () {
+    chrome.storage.sync.get(['key'], function (result) {
+        if (result.key) {
             getUnreadEmailCount(result.key)
-        }, 30 * 1000);
-    }
-});
+        }
+    });
+}, 30 * 1000);
 
 function getUnreadEmailCount(key) {
     $.ajax({
