@@ -1,6 +1,6 @@
 var domain = "https://api.inboxes.app";
 var fadeTimer = 200
-var version = '0.0.1'
+var version = '0.0.2'
 
 chrome.storage.sync.get(["key"], function (result) {
     if (result.key) {
