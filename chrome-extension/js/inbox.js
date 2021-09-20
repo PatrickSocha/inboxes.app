@@ -13,7 +13,7 @@ chrome.storage.sync.get(["key"], function (result) {
 
 function createAccount() {
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: domain + '/create_account',
         dataType: 'json',
         success: function (data) {
@@ -32,7 +32,7 @@ function run(key) {
 
 async function getNewEmail(key) {
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         beforeSend: function (request) {
             request.setRequestHeader("Authorization", key);
         },
@@ -47,7 +47,7 @@ async function getNewEmail(key) {
 async function getInbox(key) {
     $('#message-container').hide()
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         beforeSend: function (request) {
             request.setRequestHeader("Authorization", key);
         },
@@ -88,7 +88,7 @@ async function getInbox(key) {
 function openEmail(key, id) {
     $("html, body").animate({ scrollTop: 0 }, 250);
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         beforeSend: function (request) {
             request.setRequestHeader("Authorization", key);
         },
@@ -122,7 +122,7 @@ function openEmail(key, id) {
 
 function deleteInbox(key, email, elem) {
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         beforeSend: function (request) {
             request.setRequestHeader("Authorization", key);
         },
@@ -179,7 +179,7 @@ function incrementAppUsageCounter() {
 function getNews(key) {
     chrome.storage.sync.get("appUsageCounter", function (obj) {
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             beforeSend: function (request) {
                 request.setRequestHeader("Authorization", key);
             },

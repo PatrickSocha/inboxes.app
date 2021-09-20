@@ -12,7 +12,7 @@ chrome.alarms.onAlarm.addListener(() => {
 
 async function getUnreadEmailCount(key) {
     const data = fetch(domain + '/get_unread_count', {
-        method: 'GET',
+        method: 'POST',
         headers: new Headers({
             'Authorization': key,
         }),
