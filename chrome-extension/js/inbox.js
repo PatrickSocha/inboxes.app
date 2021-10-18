@@ -93,7 +93,7 @@ function openEmail(key, id) {
             request.setRequestHeader("Authorization", key);
         },
         url: domain + '/get_email',
-        data: { id },
+        data: JSON.stringify({ id }),
         dataType: 'json',
         success: function (data) {
             var emailBody = "<base target=\"_blank\" />" + data.ParsedBody
@@ -183,10 +183,10 @@ function getNews(key) {
             beforeSend: function (request) {
                 request.setRequestHeader("Authorization", key);
             },
-            data: {
+            data: JSON.stringify({
                 "app_opens": obj.appUsageCounter,
                 "app_version": version
-            },
+            }),
             url: domain + '/get_news',
             dataType: 'json',
             success: function (data) {
