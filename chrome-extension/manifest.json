@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Inboxes: unlimited temporary email addresses",
-    "description": "Inboxes lets you quickly create & delete email addresses. Stop junk & marketers in their tracks with disposable email addresses.",
+    "description": "Inboxes lets you quickly create & delete temp email addresses. Stop junk & marketers in their tracks with disposable email addresses",
     "version": "0.0.2",
     "homepage_url": "https://inboxes.app",
     "icons": {
@@ -20,6 +20,6 @@
         "https://api.inboxes.app/*"
     ],
     "background": {
-        "service_worker": "background-wrapper.js"
+        "service_worker": "background.js"
     }
 }

@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-chrome.alarms.create({ delayInMinutes: 1 });
+chrome.alarms.create({ periodInMinutes: 1 });
 
 chrome.alarms.onAlarm.addListener(() => {
     chrome.storage.sync.get(['key'], function (result) {
@@ -11,7 +11,7 @@ chrome.alarms.onAlarm.addListener(() => {
 
 async function getUnreadEmailCount(key) {
     const data = await fetch(domain + '/get_unread_count', {
-        method: 'GET',
+        method: 'POST',
         headers: new Headers({
             'Authorization': key,
         }),
@@ -25,17 +25,10 @@ function setBadge(count) {
     if (count > 0) {
         chrome.action.setBadgeText({ text: count + "" });
         chrome.action.setBadgeBackgroundColor({ color: 'red' });
-        // chrome.browserAction.setBadgeText({ text });
-        // chrome.browserAction.setBadgeBackgroundColor({ color: 'red' });
         return
     }
 
-    chrome.browserAction.setBadgeText({ text: "" });
+    chrome.action.setBadgeText({ text: "" });
 
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    chrome.storage.sync.get(['dec'], function (result) {
-        setBadge(result.dec - request.counter)
-    });
-});

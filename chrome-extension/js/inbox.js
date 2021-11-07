@@ -190,17 +190,22 @@ function getNews(key) {
             url: domain + '/get_news',
             dataType: 'json',
             success: function (data) {
-                if (data) {
-                    showNews(data.news);
-                }
+                if (data)
+                    showNews(data);
             }
         });
     });
 }
 
-function showNews(text) {
+function showNews(data) {
     $('#news').show();
-    $('#news-content').html(text);
+    $('#news-content').html(data.news);
+
+    if (data.background_color)
+        $('#news').css('backgroundColor', data.background_color);
+
+    if (data.image)
+        $('#news').css('background-image', 'url(' + data.image + ')');
 }
 
 function setKey(keyObj) {
