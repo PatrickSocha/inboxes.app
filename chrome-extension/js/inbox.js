@@ -1,6 +1,6 @@
 var domain = "https://api.inboxes.app";
 var fadeTimer = 200
-var version = '0.0.2'
+var version = '0.0.3'
 
 chrome.storage.sync.get(["key"], function (result) {
     if (result.key) {
@@ -127,7 +127,7 @@ function deleteInbox(key, email, elem) {
             request.setRequestHeader("Authorization", key);
         },
         url: domain + '/delete_inbox',
-        data: { email },
+        data: JSON.stringify({ email }),
         dataType: 'json',
         success: function (data) {
             $(elem).fadeOut(fadeTimer)

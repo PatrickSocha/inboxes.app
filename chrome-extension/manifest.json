@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Inboxes: unlimited temporary email addresses",
     "description": "Inboxes lets you quickly create & delete temp email addresses. Stop junk & marketers in their tracks with disposable email addresses",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "homepage_url": "https://inboxes.app",
     "icons": {
         "128": "assets/128-128.png"
