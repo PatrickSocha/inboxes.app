@@ -1,5 +1,5 @@
 body {
-    font-family: -apple-system,BlinkMacSystemFont,Hevetica Neue,Helvetica,Arial,sans-serif;
+    font-family: -apple-system,BlinkMacSystemFont,Hevetica Neue,Helvetica,Arial,sans-serif, "Font Awesome 5 Free";
     letter-spacing: -.031em;
     font-size: 16px;
     min-width:450px !important;
@@ -8,10 +8,9 @@ body {
 }
 
 .fw-container {
-  width: 100%;
   clear: both;
   margin: 0 auto;
-  }
+}
 
 .banner {
   height: 100px;
@@ -29,6 +28,40 @@ body {
   border-bottom: 2px solid rgb(217, 217, 217);
   color: #111;
   text-align: center;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  height: 60px;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  position: fixed;
+  margin: 0px 0px 0px 0px;
+  z-index: 999;
+}
+
+.footer > .footer-button {
+  color: #ccc;
+  height: 100%;
+  padding: 0px 0px 0px 0px;
+  font-size: 30px;
+  margin: 0px 0px 0px 0px;
+}
+
+.footer > .selected {
+  color: #222;
+}
+.footer-button > .selected-shadow {
+  height: 2px;
+  width: 50%;
+  background-color: sandybrown;
+  margin: 0px 25% 0px 25%;
+  content: "";
+}
+
+.nav-disabled {
+  margin-top: 15px;
 }
 
 .left {
@@ -50,15 +83,6 @@ h1 {
 .inbox-frame-first {
     /* border-top: 1px solid #ccc; */
     border-bottom: 1px solid #ccc;
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.closeEmail {
-  cursor: pointer;
-  margin-bottom: -20px;
 }
 
 .inbox-email {
@@ -119,7 +143,7 @@ h1 {
 .delete-button {
   visibility: hidden;
   background-color: #fff;
-  z-index: 10;
+  z-index: 5;
   position:relative;
   float: right;
   /* top: -25px; */
@@ -158,46 +182,38 @@ a:active {
     margin-left: 10px;
 }
 
-/* Media queries */
-
-@media (max-width: 400px) {
-    .mobile-center {
-        text-align: center !important;
-    }
-
-    .mobile-hide {
-        display: none !important;
-    }
-}
-
 .test {
-    background-color: #ccc;
+    background-color: red;
 }
 
 /* animate close button */
+.pointer {
+  cursor: pointer;
+}
+
+.closeEmail {
+  cursor: pointer;
+  margin-bottom: -20px;
+}
+
 .rotateClose {
   margin-top: 5px;
   width: 37px;
   height: 37px;
 }
-.rotateClose:hover{
+
+/* .rotateClose:hover + #fa-rotate-90 { */
+/* .rotateClose:hover{
   animation: rotate 0.3s ease 0s;
-  -webkit-animation: rotate 0.3s ease 0s;
 }
 @keyframes rotate{
   0%   {}
   100% {
+    transform-origin: center;
     transform: rotate(90deg);
-  }
-}
-@-webkit-keyframes rotate{
-  0%   {}
-  100% {
-    -webkit-transform: rotate(90deg);
-  }
-}
-  
 
+  }
+}  */
 
 /* tooltip  */
 
@@ -308,3 +324,6 @@ a:active {
     0% {opacity:1;}
     100% {opacity:0;}
   }
+
+/* Skeleton fix */
+.one.column,.one.columns{width:4.66666666667%}.two.columns{width:13.3333333333%}.three.columns{width:22%}.four.columns{width:33.3333333333%}.five.columns{width:39.3333333333%}.six.columns{width:50%}.seven.columns{width:56.6666666667%}.eight.columns{width:65.3333333333%}.nine.columns{width:74%}.ten.columns{width:82.6666666667%}.eleven.columns{width:91.3333333333%}.twelve.columns{width:100%;margin-left:0}

@@ -7,12 +7,13 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
     <link rel="stylesheet" href="css/skeleton.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/icofont.css">
+    <link rel="stylesheet" type="text/css" href="css/fontawesome.min.css">
     <script src="js/jquery.min.js"></script>
     <script src="js/inbox.js"></script>
 </head>
 
 <body>
+    <!-- Banner -->
     <div class="fw-container">
         <div class="row">
             <div class="twelve columns banner">
@@ -36,20 +37,22 @@
         </div>
     </div>
 
+    <!-- News section -->
     <div class="fw-container news" id="news">
         <div class="row">
             <div class="twelve columns" id="news-content"></div>
         </div>
     </div>
 
+    <!-- Message container -->
     <div style="height: 600px">
         <div class="fw-container default-hide" id="message-container">
             <div class="twelve columns inbox-email inbox-frame-first message fade-in">
 
                 <div class="right" style="width: 10%; margin-top: -5px;">
                     <h2>
-                        <div id="closeEmail" class="closeEmail icofont-close-line rotateClose"
-                            class="display: inline-block" title="Close email"></div>
+                        <div id="closeEmail" class="closeEmail fas fa-times rotateClose" class="display: inline-block"
+                            title="Close email"></div>
                     </h2>
                 </div>
                 <div class="left" style="width: 90%">
@@ -68,14 +71,19 @@
                 </iframe>
             </div>
         </div>
+
+        <!-- Inbox container -->
         <div class="container">
-            <div class="inbox-zero">
-                <h3>Inbox zero 🎉</h3>
+            <div class="inbox-zero" id="empty-read">
+                <h3>Inbox zero &nbsp; 🎉</h3>
                 <p>You have no emails in your inbox - nice!</p>
                 <br />
                 <p><strong>To get started: </strong>You should use the email provided above when signing
                     up to websites you don't want in your normal inbox. They'll start appearing here, and when you're
                     done hearing from them, hit the 'delete inbox' button. You'll never hear from them again!</p>
+            </div>
+            <div class="inbox-zero" id="empty-unread">
+                <h3>Empty read folder &nbsp; 👀</h3>
             </div>
             <div class="list" id="list"></div>
             <div class="em pointer" style="display: none;">
@@ -86,6 +94,35 @@
                     <div class="two columns" id="date-time"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="fw-container">
+        <div class="twelve columns footer">
+            <!-- unread button -->
+            <div class="twelve columns footer-button text-center selected" id="viewUnreadButton">
+                <i class="far fa-envelope"></i>
+                <div style="font-size: 10px; margin-top: -10px;">View unread</div>
+                <!-- <div class="selected-shadow"></div> -->
+            </div>
+
+            <!-- read button -->
+            <div class="twelve columns footer-button text-center selected u-hide" id="viewReadButton">
+                <div class="far fa-envelope-open"></div>
+                <div style="font-size: 10px; margin-top: -10px;">View read</div>
+                <!-- <div class="selected-shadow"></div> -->
+            </div>
+
+            <!-- sms button -->
+            <!-- <div class="four columns footer-button text-center" title="SMS coming soon">
+                <i class="far fa-mobile-alt nav-disabled"></i>
+            </div> -->
+
+            <!-- settings button -->
+            <!-- <div class="six columns footer-button text-center">
+                <i class="far fa-cog nav-disabled"></i>
+            </div> -->
         </div>
     </div>
 </body>

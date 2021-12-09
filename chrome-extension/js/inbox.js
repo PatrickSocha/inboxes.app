@@ -1,11 +1,12 @@
 var domain = "https://api.inboxes.app";
-var fadeTimer = 200
-var version = '0.0.3'
+var version = '0.0.4';
+let key;
+var fadeTimer = 200;
 
 chrome.storage.sync.get(["key"], function (result) {
     if (result.key) {
-        run(result.key)
-        return
+        key = result.key
+        return run();
     }
 
     createAccount()
@@ -18,19 +19,19 @@ function createAccount() {
         dataType: 'json',
         success: function (data) {
             setKey({ "key": data.key });
-            run(data.key);
+            run();
         }
     });
 }
 
-function run(key) {
-    getNewEmail(key)
-    getInbox(key)
-    getNews(key)
+function run() {
+    getNewEmail()
+    getInbox()
+    getNews()
     incrementAppUsageCounter()
 }
 
-async function getNewEmail(key) {
+async function getNewEmail() {
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -44,8 +45,10 @@ async function getNewEmail(key) {
     });
 }
 
-async function getInbox(key) {
-    $('#message-container').hide()
+async function getInbox() {
+    resetState();
+    $('#viewReadButton').show();
+
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -55,37 +58,62 @@ async function getInbox(key) {
         dataType: 'json',
         success: function (data) {
             if (data.length == 0) {
-                $('.inbox-zero').fadeIn(fadeTimer)
+                $('#empty-read').fadeIn(fadeTimer)
                 return
             }
-            $.each(data, function (index, element) {
-                var cl = ".em-" + index
-                $('.em').clone()
-                    .addClass("em-" + index)
-                    .removeClass("em")
-                    .appendTo(".list")
-                    .show()
-
-                var deleteElem = cl + ' .delete-button'
-                $(cl).on("click", function (e) {
-                    if ($(e.target).is(deleteElem)) {
-                        // console.log(e.target)
-                        return false;
-                    }
-                    openEmail(key, element.ID)
-                });
-                $(cl + ' #subject').text(element.Subject)
-
-                $(deleteElem).on("click", function () {
-                    deleteInbox(key, element.To, cl)
-                });
-
-            });
+            populateMessageList(data);
         }
     });
 }
 
-function openEmail(key, id) {
+async function getUnreadInbox() {
+    resetState();
+    $('#viewUnreadButton').show();
+
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/get_read_inbox',
+        dataType: 'json',
+        success: function (data) {
+            if (data.length == 0) {
+                $('#empty-unread').fadeIn(fadeTimer)
+                return
+            }
+            populateMessageList(data);
+        }
+    });
+}
+
+function populateMessageList(data) {
+    $.each(data, function (index, element) {
+        var cl = ".em-" + index
+        $('.em').clone()
+            .addClass("em-" + index)
+            .removeClass("em")
+            .appendTo(".list")
+            .fadeIn(fadeTimer)
+
+        var deleteElem = cl + ' .delete-button'
+        $(cl).on("click", function (e) {
+            if ($(e.target).is(deleteElem)) {
+                // console.log(e.target)
+                return false;
+            }
+            openEmail(element.ID)
+        });
+        $(cl + ' #subject').text(element.Subject)
+
+        $(deleteElem).on("click", function () {
+            deleteInbox(element.To, cl)
+        });
+
+    });
+}
+
+function openEmail(id) {
     $("html, body").animate({ scrollTop: 0 }, 250);
     $.ajax({
         type: 'POST',
@@ -120,7 +148,7 @@ function openEmail(key, id) {
     });
 }
 
-function deleteInbox(key, email, elem) {
+function deleteInbox(email, elem) {
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -146,14 +174,6 @@ function closeEmail() {
     $('#iframe').css("height", "0px")
 }
 
-$(document).ready(function () {
-    $("#closeEmail").click(closeEmail);
-});
-
-$(document).ready(function () {
-    $("#emailForm").click(copyEmailAddress);
-});
-
 
 
 function copyEmailAddress() {
@@ -176,7 +196,7 @@ function incrementAppUsageCounter() {
     });
 }
 
-function getNews(key) {
+function getNews() {
     chrome.storage.sync.get("appUsageCounter", function (obj) {
         $.ajax({
             type: 'POST',
@@ -208,6 +228,15 @@ function showNews(data) {
         $('#news').css('background-image', 'url(' + data.image + ')');
 }
 
+// Listeners
+$(document).ready(function () {
+    $("#closeEmail").click(closeEmail);
+    $("#emailForm").click(copyEmailAddress);
+    $("#viewReadButton").click(getUnreadInbox);
+    $("#viewUnreadButton").click(getInbox);
+});
+
+// Helpers
 function setKey(keyObj) {
     chrome.storage.sync.set(keyObj);
 }
@@ -215,4 +244,15 @@ function deleteKey(key) {
     chrome.storage.sync.remove(key, function () {
         console.log('key deleted');
     });
+}
+
+function resetState() {
+    $('.inbox-zero').hide()
+    $('#viewReadButton').hide()
+    $('#viewUnreadButton').hide()
+
+    $('#message-container').hide()
+    $('.list').empty();
+    closeEmail();
+    // $('#list').delay(100).fadeIn(fadeTimer) // arguably this is all that is required.
 }
