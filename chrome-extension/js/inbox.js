@@ -46,8 +46,13 @@ async function getNewEmail() {
 }
 
 async function getInbox() {
-    resetState();
-    $('#viewReadButton').show();
+    // resetState();
+    setState(
+        ['viewUnreadButton', 'viewSettingsButton'],
+        'viewUnreadButton',
+        ['viewInboxContainer']
+    );
+    // $('#viewReadButton').show();
 
     $.ajax({
         type: 'POST',
@@ -57,8 +62,8 @@ async function getInbox() {
         url: domain + '/get_inbox',
         dataType: 'json',
         success: function (data) {
-            if (data.length == 0) {
-                $('#empty-read').fadeIn(fadeTimer)
+            if (data.length === 0) {
+                $( "#viewInboxZero" ).load( "views/viewInboxZero.html" ).fadeIn(fadeTimer);
                 return
             }
             populateMessageList(data);
@@ -66,9 +71,13 @@ async function getInbox() {
     });
 }
 
-async function getUnreadInbox() {
-    resetState();
-    $('#viewUnreadButton').show();
+async function getReadInbox() {
+    setState(
+        ['viewReadButton', 'viewSettingsButton'],
+        'viewReadButton',
+        ['viewInboxContainer']
+    );
+    // $('#viewUnreadButton').show();
 
     $.ajax({
         type: 'POST',
@@ -78,8 +87,8 @@ async function getUnreadInbox() {
         url: domain + '/get_read_inbox',
         dataType: 'json',
         success: function (data) {
-            if (data.length == 0) {
-                $('#empty-unread').fadeIn(fadeTimer)
+            if (data.length === 0) {
+                $( "#viewEmptyUnread" ).load( "views/viewEmptyUnread.html" ).fadeIn(fadeTimer);
                 return
             }
             populateMessageList(data);
@@ -89,14 +98,14 @@ async function getUnreadInbox() {
 
 function populateMessageList(data) {
     $.each(data, function (index, element) {
-        var cl = ".em-" + index
+        const cl = ".em-" + index;
         $('.em').clone()
             .addClass("em-" + index)
             .removeClass("em")
             .appendTo(".list")
             .fadeIn(fadeTimer)
 
-        var deleteElem = cl + ' .delete-button'
+        const deleteElem = cl + ' .delete-button';
         $(cl).on("click", function (e) {
             if ($(e.target).is(deleteElem)) {
                 // console.log(e.target)
@@ -127,9 +136,9 @@ function openEmail(id) {
             var emailBody = "<base target=\"_blank\" />" + data.ParsedBody
             $('#subject').text(data.Subject);
             $('#to').text(data.To);
-            $("#iframe").attr("srcdoc", emailBody);
+            $('#iframe').attr("srcdoc", emailBody);
             $("#iframe").on('load', function () {
-                $('#message-container').show()
+                $('#viewMessageContainer').show()
 
                 var body = this.contentWindow.document.body,
                     html = this.contentWindow.document.documentElement;
@@ -140,12 +149,21 @@ function openEmail(id) {
                 this.style.height = height + 'px';
             });
 
-            // $('#message-container').css("height", height + "px")
-            $('.message').fadeIn(fadeTimer)
-            $('#list').fadeOut(fadeTimer)
+            // $('#viewMessageContainer').css("height", height + "px")
+            $('.message').fadeIn(fadeTimer);
+            $('#list').fadeOut(fadeTimer);
 
         }
     });
+}
+
+function getSettings() {
+    setState(
+        ['viewReadButton','viewSettingsButton'],
+        'viewSettingsButton',
+        ['viewSettingsPage']);
+
+    $( "#viewSettingsPage" ).load( "views/viewSettings.html" ).fadeIn(fadeTimer);
 }
 
 function deleteInbox(email, elem) {
@@ -169,7 +187,7 @@ function closeEmail() {
         $('.message > .to').text("")
         $('.emailBody').remove()
     })
-    $('#message-container').fadeOut(fadeTimer)
+    $('#viewMessageContainer').fadeOut(fadeTimer)
     $('#list').delay(100).fadeIn(fadeTimer)
     $('#iframe').css("height", "0px")
 }
@@ -177,7 +195,7 @@ function closeEmail() {
 
 
 function copyEmailAddress() {
-    var copyText = document.getElementById("emailForm");
+    const copyText = document.getElementById("emailForm");
     copyText.select();
     copyText.setSelectionRange(0, 99999);
     document.execCommand("copy");
@@ -232,8 +250,9 @@ function showNews(data) {
 $(document).ready(function () {
     $("#closeEmail").click(closeEmail);
     $("#emailForm").click(copyEmailAddress);
-    $("#viewReadButton").click(getUnreadInbox);
-    $("#viewUnreadButton").click(getInbox);
+    $("#viewReadButton").click(getInbox);
+    $("#viewUnreadButton").click(getReadInbox);
+    $("#viewSettingsButton").click(getSettings);
 });
 
 // Helpers
@@ -246,13 +265,47 @@ function deleteKey(key) {
     });
 }
 
-function resetState() {
-    $('.inbox-zero').hide()
-    $('#viewReadButton').hide()
-    $('#viewUnreadButton').hide()
 
-    $('#message-container').hide()
+// state control
+const setupViewState = {
+    viewSettingsButton: true,
+    viewUnreadButton: false,
+    viewReadButton: false,
+
+    viewInboxContainer: true,
+    viewSettingsPage: false,
+    viewInboxZero: false
+}
+
+function setState(nav, navHighlight, showState){
+    // copy default view setup
+    const currentState = jQuery.extend({}, setupViewState);
+
+    // reset then set highlighted nav bar item
+    for (const [k, v] of Object.entries(currentState)) {
+        $('#'+k).removeClass('selected');
+    }
+    if (typeof navHighlight === 'string') {
+        $('#'+navHighlight).addClass('selected');
+    }
+
+    // toggle nav and view states
+    for (const i in nav) {
+        currentState[nav[i]] = true;
+    }
+    for (const i in showState) {
+        currentState[showState[i]] = true;
+    }
+
+    // paint states
+    for (const [k, v] of Object.entries(currentState)) {
+        if (v === true)
+            $('#'+k).show()
+        if (v === false)
+            $('#'+k).hide()
+    }
+
+    // reset states
     $('.list').empty();
     closeEmail();
-    // $('#list').delay(100).fadeIn(fadeTimer) // arguably this is all that is required.
 }

@@ -5,6 +5,7 @@ body {
     min-width:450px !important;
     margin: 0;
     padding: 0;
+    height: 600px;
 }
 
 .fw-container {
@@ -15,8 +16,10 @@ body {
 .banner {
   height: 100px;
   padding: 20px;
-  background-color: rgb(246, 247, 248); 
+  background-color: rgb(246, 247, 248);
   border-bottom: 2px solid rgb(217, 217, 217);
+  /*background-color: #ffde00;*/
+  /*border-bottom: 2px solid #ffc800;*/
   color: #111;
 }
 
@@ -24,7 +27,7 @@ body {
   display: none;
   height: auto;
   padding: 5px;;
-  background-color: #95afc0; 
+  background-color: #95afc0;
   border-bottom: 2px solid rgb(217, 217, 217);
   color: #111;
   text-align: center;
@@ -60,9 +63,10 @@ body {
   content: "";
 }
 
-.nav-disabled {
-  margin-top: 15px;
-}
+/* remove me, maybe?*/
+/*.nav-disabled {*/
+/*  margin-top: 15px;*/
+/*}*/
 
 .left {
   float: left;
@@ -105,8 +109,7 @@ h1 {
 }
 
 .inbox-zero {
-  padding-top: 50px;
-  display: none;
+  margin: 50px 30px 0px 30px;
   text-align: center;
 }
 
@@ -125,6 +128,14 @@ h1 {
   margin-left: -7px;
   position: absolute;
   border: 0;
+}
+
+/* settings page */
+#viewSettingsPage td {
+  padding: 10px;
+}
+#viewSettingsPage a {
+  text-decoration: underline;
 }
 
 .default-hide {
@@ -165,7 +176,7 @@ a:hover {
 a:active {
     color: #000;
     text-decoration: none;
-} 
+}
 
 
 /* Text */
@@ -215,8 +226,8 @@ a:active {
   }
 }  */
 
-/* tooltip  */
 
+/* tooltip  */
 .tooltip {
   z-index: 100;
   position: relative;
@@ -272,22 +283,22 @@ a:active {
     0% {opacity:0;}
     100% {opacity:1;}
   }
-  
+
   @-moz-keyframes fadeIn {
     0% {opacity:0;}
     100% {opacity:1;}
   }
-  
+
   @-webkit-keyframes fadeIn {
     0% {opacity:0;}
     100% {opacity:1;}
   }
-  
+
   @-o-keyframes fadeIn {
     0% {opacity:0;}
     100% {opacity:1;}
   }
-  
+
   @-ms-keyframes fadeIn {
     0% {opacity:0;}
     100% {opacity:1;}
@@ -304,22 +315,22 @@ a:active {
     0% {opacity:1;}
     100% {opacity:0;}
   }
-  
+
   @-moz-keyframes fadeOut {
     0% {opacity:1;}
     100% {opacity:0;}
   }
-  
+
   @-webkit-keyframes fadeOut {
     0% {opacity:1;}
     100% {opacity:0;}
   }
-  
+
   @-o-keyframes fadeOut {
     0% {opacity:1;}
     100% {opacity:0;}
   }
-  
+
   @-ms-keyframes fadeOut {
     0% {opacity:1;}
     100% {opacity:0;}

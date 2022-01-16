@@ -19,12 +19,7 @@
             <div class="twelve columns banner">
                 <div class="row">
                     <div style="float: left;">
-                        <img src="assets/128-128.png" height="65px">
-                    </div>
-                    <div style="float: left; margin: 10px 0px 0px 10px;">
-                        <div class="columns">
-                            <h3>Inboxes</h3>
-                        </div>
+                        <img src="assets/logo.svg" style="height: 40px; margin: 12px 0px 0px 0px;">
                     </div>
                     <span class="right" style="float: right; margin-top: 15px;">
                         <div class="tooltip">
@@ -45,8 +40,8 @@
     </div>
 
     <!-- Message container -->
-    <div style="height: 600px">
-        <div class="fw-container default-hide" id="message-container">
+    <div style="min-height: 501px"> <!-- 501 to enable scrolling. Strange bug if < 500. -->
+        <div class="fw-container default-hide" id="viewMessageContainer">
             <div class="twelve columns inbox-email inbox-frame-first message fade-in">
 
                 <div class="right" style="width: 10%; margin-top: -5px;">
@@ -73,18 +68,10 @@
         </div>
 
         <!-- Inbox container -->
-        <div class="container">
-            <div class="inbox-zero" id="empty-read">
-                <h3>Inbox zero &nbsp; 🎉</h3>
-                <p>You have no emails in your inbox - nice!</p>
-                <br />
-                <p><strong>To get started: </strong>You should use the email provided above when signing
-                    up to websites you don't want in your normal inbox. They'll start appearing here, and when you're
-                    done hearing from them, hit the 'delete inbox' button. You'll never hear from them again!</p>
-            </div>
-            <div class="inbox-zero" id="empty-unread">
-                <h3>Empty read folder &nbsp; 👀</h3>
-            </div>
+        <div class="container" id="viewInboxContainer">
+            <div id="viewInboxZero"></div>
+            <div id="viewEmptyUnread"></div>
+
             <div class="list" id="list"></div>
             <div class="em pointer" style="display: none;">
                 <div class="twelve columns inbox-email inbox-frame-first">
@@ -95,33 +82,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="u-hide" id="viewSettingsPage"></div>
+
     </div>
+
 
     <!-- Footer -->
     <div class="fw-container">
         <div class="twelve columns footer">
             <!-- unread button -->
-            <div class="twelve columns footer-button text-center selected" id="viewUnreadButton">
+            <div class="six columns footer-button text-center pointer selected u-hide" id="viewUnreadButton">
                 <i class="far fa-envelope"></i>
-                <div style="font-size: 10px; margin-top: -10px;">View unread</div>
+                <div style="font-size: 10px; margin-top: -10px;">Unread</div>
                 <!-- <div class="selected-shadow"></div> -->
             </div>
 
             <!-- read button -->
-            <div class="twelve columns footer-button text-center selected u-hide" id="viewReadButton">
+            <div class="six columns footer-button text-center pointer selected u-hide" id="viewReadButton">
                 <div class="far fa-envelope-open"></div>
-                <div style="font-size: 10px; margin-top: -10px;">View read</div>
+                <div style="font-size: 10px; margin-top: -10px;">Read</div>
                 <!-- <div class="selected-shadow"></div> -->
+            </div>
+
+            <!-- settings button -->
+            <div class="six columns footer-button pointer text-center" id="viewSettingsButton">
+                <i class="far fa-cog"></i>
+                <div style="font-size: 10px; margin-top: -10px;">Settings</div>
             </div>
 
             <!-- sms button -->
             <!-- <div class="four columns footer-button text-center" title="SMS coming soon">
                 <i class="far fa-mobile-alt nav-disabled"></i>
-            </div> -->
-
-            <!-- settings button -->
-            <!-- <div class="six columns footer-button text-center">
-                <i class="far fa-cog nav-disabled"></i>
             </div> -->
         </div>
     </div>
