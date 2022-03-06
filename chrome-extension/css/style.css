@@ -204,137 +204,19 @@ a:active {
 
 .closeEmail {
   cursor: pointer;
-  margin-bottom: -20px;
-}
-
-.rotateClose {
-  margin-top: 5px;
-  width: 37px;
-  height: 37px;
-}
-
-/* .rotateClose:hover + #fa-rotate-90 { */
-/* .rotateClose:hover{
-  animation: rotate 0.3s ease 0s;
-}
-@keyframes rotate{
-  0%   {}
-  100% {
-    transform-origin: center;
-    transform: rotate(90deg);
-
-  }
-}  */
-
-
-/* tooltip  */
-.tooltip {
-  z-index: 100;
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltiptext {
-  /* visibility: hidden; */
-  width: 140px;
-  background-color: #555;
-  color: #fff;
+  margin: 0px 20px 0px 0px;
   text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  /* bottom: 150%;
-  left: 50%; */
-  margin-top: -20px;
-  margin-left: 9px;
-  opacity: 0;
-  transition: opacity 0.3s;
 }
 
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: -25%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  transform: rotate(180deg);
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  
+/* Actions digits styling */
+.actions-form {
+  width: 31px;
+  margin-left: 5px;
+  text-transform: uppercase;
+  text-align: center;
+  /* caret-color: transparent; */
 }
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-
-
-/* Fading out then back in smooth transition */
-.fade-in {
-    animation: fadeIn ease 0.3s;
-    -webkit-animation: fadeIn ease 0.3s;
-    -moz-animation: fadeIn ease 0.3s;
-    -o-animation: fadeIn ease 0.3s;
-    -ms-animation: fadeIn ease 0.3s;
-  }
-  @keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-moz-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-webkit-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-o-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-ms-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  .fade-out {
-    animation: fadeOut ease 0.3s;
-    -webkit-animation: fadeOut ease 0.3s;
-    -moz-animation: fadeOut ease 0.3s;
-    -o-animation: fadeOut ease 0.3s;
-    -ms-animation: fadeOut ease 0.3s;
-  }
-  @keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-moz-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-webkit-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-o-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-ms-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
 
 /* Skeleton fix */
 .one.column,.one.columns{width:4.66666666667%}.two.columns{width:13.3333333333%}.three.columns{width:22%}.four.columns{width:33.3333333333%}.five.columns{width:39.3333333333%}.six.columns{width:50%}.seven.columns{width:56.6666666667%}.eight.columns{width:65.3333333333%}.nine.columns{width:74%}.ten.columns{width:82.6666666667%}.eleven.columns{width:91.3333333333%}.twelve.columns{width:100%;margin-left:0}

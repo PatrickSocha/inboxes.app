@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.4';
+var version = '0.0.5';
 let key;
 var fadeTimer = 200;
 
@@ -40,19 +40,17 @@ async function getNewEmail() {
         url: domain + '/get_new_address',
         dataType: 'json',
         success: function (data) {
-            $('.emailForm').val(data.email);
+            $('#disposableEmailForm').val(data.email);
         }
     });
 }
 
 async function getInbox() {
-    // resetState();
-    setState(
+    setNavigationState(
         ['viewUnreadButton', 'viewSettingsButton'],
         'viewUnreadButton',
         ['viewInboxContainer']
     );
-    // $('#viewReadButton').show();
 
     $.ajax({
         type: 'POST',
@@ -62,8 +60,8 @@ async function getInbox() {
         url: domain + '/get_inbox',
         dataType: 'json',
         success: function (data) {
-            if (data.length === 0) {
-                $( "#viewInboxZero" ).load( "views/viewInboxZero.html" ).fadeIn(fadeTimer);
+            if (data === null || data.length === 0) {
+                $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
                 return
             }
             populateMessageList(data);
@@ -72,12 +70,11 @@ async function getInbox() {
 }
 
 async function getReadInbox() {
-    setState(
+    setNavigationState(
         ['viewReadButton', 'viewSettingsButton'],
         'viewReadButton',
         ['viewInboxContainer']
     );
-    // $('#viewUnreadButton').show();
 
     $.ajax({
         type: 'POST',
@@ -87,8 +84,8 @@ async function getReadInbox() {
         url: domain + '/get_read_inbox',
         dataType: 'json',
         success: function (data) {
-            if (data.length === 0) {
-                $( "#viewEmptyUnread" ).load( "views/viewEmptyUnread.html" ).fadeIn(fadeTimer);
+            if (data === null || data.length === 0) {
+                $("#load").load("views/viewEmptyUnread.html").fadeIn(fadeTimer);
                 return
             }
             populateMessageList(data);
@@ -157,13 +154,116 @@ function openEmail(id) {
     });
 }
 
-function getSettings() {
-    setState(
-        ['viewReadButton','viewSettingsButton'],
-        'viewSettingsButton',
-        ['viewSettingsPage']);
 
-    $( "#viewSettingsPage" ).load( "views/viewSettings.html" ).fadeIn(fadeTimer);
+function updateEmail() {
+    const email = $("#emailForm").val();
+
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        data: JSON.stringify({
+            "email": email,
+        }),
+        url: domain + '/update_account_email',
+        dataType: 'json',
+        success: function (data) {
+            if (data)
+                showNews(data);
+        }
+    });
+}
+
+function verifyAccountEmail() {
+    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+    const codeParts = [];
+    for (let i = 0; i < 5; i++) {
+        codeParts.push($("#validation-" + i).val());
+    }
+    const code = codeParts.join('');
+
+    setTimeout(function () {
+        $.ajax({
+            type: 'POST',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", key);
+            },
+            data: JSON.stringify({ "code": code }),
+            url: domain + '/verify_account_email',
+            dataType: 'json',
+            success: function (data) {
+                toggleConfetti();
+                $("#verifyingSpinner").remove()
+                $("#verifyingHeader").text("Email updated 👌")
+                $("#verifyingText").text("")
+                setTimeout(function () {
+                    toggleConfetti();
+                }, 1500)
+            },
+            error: function () {
+                $("#verifyingSpinner").remove()
+                $("#verifyingHeader").text("Invalid code")
+                $("#verifyingText").text("Check you entered the correct code and try again.")
+            }
+        });
+
+    }, 1000);
+
+
+}
+
+function getSettings() {
+    setNavigationState(
+        ['viewReadButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['view']);
+
+    $("#load").load("views/viewSettings.html").fadeIn(fadeTimer);
+}
+
+function getViewEditEmail() {
+    setNavigationState(
+        ['viewReadButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['view']);
+
+    $("#load").load("views/viewEditEmail.html").fadeIn(fadeTimer);
+}
+
+function getViewValidateAction() {
+    setNavigationState(
+        ['viewReadButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['view']
+    );
+
+    $("body").on('keyup', '.actions-form', function (e) {
+        if (e.keyCode === 8) {
+            $(this).prev().focus()
+        } else {
+            $(this).next().focus()
+        }
+    });
+
+    $("body").on('paste', '.actions-form', function (e) {
+        var pasteData = e.originalEvent.clipboardData.getData('text').split("");
+        if (pasteData.length != 5) {
+            pasteData = void 0; // unset data, we shouldn't store it.
+            return
+        }
+
+        for (let i = 0; i < 5; i++) {
+            $("#validation-" + i).val(pasteData[i]);
+            $("#validation-" + i).select();
+        }
+
+        pasteData = void 0; // unset data, we shouldn't store it.
+        setTimeout(verifyAccountEmail, 100);
+    });
+
+
+    $("#load").load("views/viewValidateAction.html").fadeIn(fadeTimer);
 }
 
 function deleteInbox(email, elem) {
@@ -195,7 +295,7 @@ function closeEmail() {
 
 
 function copyEmailAddress() {
-    const copyText = document.getElementById("emailForm");
+    const copyText = document.getElementById("disposableEmailForm");
     copyText.select();
     copyText.setSelectionRange(0, 99999);
     document.execCommand("copy");
@@ -248,14 +348,23 @@ function showNews(data) {
 
 // Listeners
 $(document).ready(function () {
-    $("#closeEmail").click(closeEmail);
-    $("#emailForm").click(copyEmailAddress);
-    $("#viewReadButton").click(getInbox);
-    $("#viewUnreadButton").click(getReadInbox);
-    $("#viewSettingsButton").click(getSettings);
+    // views
+    $(document).delegate("#closeEmail", "click", closeEmail);
+    $(document).delegate("#disposableEmailForm", "click", copyEmailAddress);
+    $(document).delegate("#viewReadButton", "click", getInbox);
+    $(document).delegate("#viewUnreadButton", "click", getReadInbox);
+    $(document).delegate("#viewSettingsButton", "click", getSettings);
+    $(document).delegate("#viewEditEmail", "click", getViewEditEmail);
+    $(document).delegate("#viewValidateAction", "click", getViewValidateAction);
+
+    // forms
+    $(document).delegate("#updateEmail", "click", updateEmail);
+    $(document).delegate("#verifyAccountEmail", "click", verifyAccountEmail);
 });
 
+// //
 // Helpers
+//
 function setKey(keyObj) {
     chrome.storage.sync.set(keyObj);
 }
@@ -265,6 +374,9 @@ function deleteKey(key) {
     });
 }
 
+// // // 
+// Nav
+// 
 
 // state control
 const setupViewState = {
@@ -273,20 +385,19 @@ const setupViewState = {
     viewReadButton: false,
 
     viewInboxContainer: true,
-    viewSettingsPage: false,
-    viewInboxZero: false
+    load: false
 }
 
-function setState(nav, navHighlight, showState){
+function setNavigationState(nav, navHighlight, showState) {
     // copy default view setup
     const currentState = jQuery.extend({}, setupViewState);
 
     // reset then set highlighted nav bar item
     for (const [k, v] of Object.entries(currentState)) {
-        $('#'+k).removeClass('selected');
+        $('#' + k).removeClass('selected');
     }
     if (typeof navHighlight === 'string') {
-        $('#'+navHighlight).addClass('selected');
+        $('#' + navHighlight).addClass('selected');
     }
 
     // toggle nav and view states
@@ -300,9 +411,9 @@ function setState(nav, navHighlight, showState){
     // paint states
     for (const [k, v] of Object.entries(currentState)) {
         if (v === true)
-            $('#'+k).show()
+            $('#' + k).show()
         if (v === false)
-            $('#'+k).hide()
+            $('#' + k).hide()
     }
 
     // reset states
