@@ -176,12 +176,13 @@ function updateEmail() {
 }
 
 function verifyAccountEmail() {
-    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
     const codeParts = [];
     for (let i = 0; i < 5; i++) {
         codeParts.push($("#validation-" + i).val());
     }
     const code = codeParts.join('');
+
+    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
 
     setTimeout(function () {
         $.ajax({
@@ -196,7 +197,6 @@ function verifyAccountEmail() {
                 toggleConfetti();
                 $("#verifyingSpinner").remove()
                 $("#verifyingHeader").text("Email updated 👌")
-                $("#verifyingText").text("")
                 setTimeout(function () {
                     toggleConfetti();
                 }, 1500)
