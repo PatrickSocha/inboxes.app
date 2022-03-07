@@ -246,15 +246,29 @@ function getViewValidateAction() {
         }
     });
 
-    $("body").on('paste', '.actions-form', function (e) {
+    $("body").on('keyup', '.actions-form', function (e) {
+        let count = 0
+        for (let i = 0; i < 5; i++) {
+            if ($('#validation-' + i).val() !== ""){
+                count++;
+            }
+        }
+        if (count === 5) {
+            $('#verifyAccountEmail').attr("disabled", false);
+        } else {
+            $('#verifyAccountEmail').attr("disabled", true);
+        }
+    });
+
+    $('body').on('paste', '.actions-form', function (e) {
         var pasteData = e.originalEvent.clipboardData.getData('text').split("");
-        if (pasteData.length != 5) {
+        if (pasteData.length !== 5) {
             pasteData = void 0; // unset data, we shouldn't store it.
             return
         }
 
         for (let i = 0; i < 5; i++) {
-            $("#validation-" + i).val(pasteData[i]);
+            $('#validation-' + i).val(pasteData[i]);
             $("#validation-" + i).select();
         }
 
@@ -374,9 +388,9 @@ function deleteKey(key) {
     });
 }
 
-// // // 
+// // //
 // Nav
-// 
+//
 
 // state control
 const setupViewState = {
