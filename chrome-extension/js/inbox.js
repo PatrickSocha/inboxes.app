@@ -156,7 +156,9 @@ function openEmail(id) {
 
 
 function updateEmail() {
+    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
     const email = $("#emailForm").val();
+
 
     $.ajax({
         type: 'POST',
@@ -169,20 +171,27 @@ function updateEmail() {
         url: domain + '/update_account_email',
         dataType: 'json',
         success: function (data) {
-            if (data)
-                showNews(data);
+            $("#verifyingSpinner").remove()
+            $("#verifyingHeader").text("Check your email")
+            $("#verifyingText").text("Enter your unique verification code in the settings page.")
+        },
+        error: function () {
+            $("#verifyingSpinner").remove()
+            $("#verifyingHeader").text("Invalid code")
+            $("#verifyingText").text("Check you entered the correct code and try again.")
         }
     });
 }
 
 function verifyAccountEmail() {
+    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+
     const codeParts = [];
     for (let i = 0; i < 5; i++) {
         codeParts.push($("#validation-" + i).val());
     }
     const code = codeParts.join('').toUpperCase();
 
-    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
 
     setTimeout(function () {
         $.ajax({
@@ -248,10 +257,11 @@ function getViewValidateAction() {
 
         let count = 0
         for (let i = 0; i < 5; i++) {
-            if ($('#validation-' + i).val() !== ""){
+            if ($('#validation-' + i).val() !== "") {
                 count++;
             }
         }
+
         if (count === 5) {
             setTimeout(verifyAccountEmail, 200);
         }
@@ -266,10 +276,9 @@ function getViewValidateAction() {
 
         for (let i = 0; i < 5; i++) {
             $('#validation-' + i).val(pasteData[i]);
-            $("#validation-" + i).select();
+            $("#validation-" + i).focus();
         }
     });
-
 
     $("#load").load("views/viewValidateAction.html").fadeIn(fadeTimer);
 }

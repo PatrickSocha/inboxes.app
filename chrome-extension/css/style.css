@@ -212,6 +212,7 @@ a:active {
 /* Actions digits styling */
 .actions-form {
   width: 35px;
+  height: 38px;
   margin-left: 5px;
   text-transform: uppercase;
   text-align: center;
