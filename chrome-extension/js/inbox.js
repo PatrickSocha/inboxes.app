@@ -180,7 +180,7 @@ function verifyAccountEmail() {
     for (let i = 0; i < 5; i++) {
         codeParts.push($("#validation-" + i).val());
     }
-    const code = codeParts.join('');
+    const code = codeParts.join('').toUpperCase();
 
     $("#load").load("views/verifying.html").fadeIn(fadeTimer);
 
@@ -238,15 +238,14 @@ function getViewValidateAction() {
         ['view']
     );
 
-    $("body").on('keyup', '.actions-form', function (e) {
+    $('body').on('keyup', '.actions-form', function (e) {
+        // backspace
         if (e.keyCode === 8) {
             $(this).prev().focus()
         } else {
             $(this).next().focus()
         }
-    });
 
-    $("body").on('keyup', '.actions-form', function (e) {
         let count = 0
         for (let i = 0; i < 5; i++) {
             if ($('#validation-' + i).val() !== ""){
@@ -254,9 +253,7 @@ function getViewValidateAction() {
             }
         }
         if (count === 5) {
-            $('#verifyAccountEmail').attr("disabled", false);
-        } else {
-            $('#verifyAccountEmail').attr("disabled", true);
+            setTimeout(verifyAccountEmail, 200);
         }
     });
 
@@ -271,9 +268,6 @@ function getViewValidateAction() {
             $('#validation-' + i).val(pasteData[i]);
             $("#validation-" + i).select();
         }
-
-        pasteData = void 0; // unset data, we shouldn't store it.
-        setTimeout(verifyAccountEmail, 100);
     });
 
 
@@ -373,7 +367,6 @@ $(document).ready(function () {
 
     // forms
     $(document).delegate("#updateEmail", "click", updateEmail);
-    $(document).delegate("#verifyAccountEmail", "click", verifyAccountEmail);
 });
 
 // //
@@ -403,6 +396,9 @@ const setupViewState = {
 }
 
 function setNavigationState(nav, navHighlight, showState) {
+    // reset all handlers
+    $('body').off()
+
     // copy default view setup
     const currentState = jQuery.extend({}, setupViewState);
 
