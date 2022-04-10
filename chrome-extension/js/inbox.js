@@ -131,12 +131,16 @@ function openEmail(id) {
         dataType: 'json',
         success: function (data) {
             var emailBody = "<base target=\"_blank\" />" + data.ParsedBody
+            emailBody = emailBody.replaceAll('<script','<script async').replaceAll('<img','<img loading="lazy"')
+
             $('#subject').text(data.Subject);
             $('#to').text(data.To);
+            $("#iframe-loading").show();
+
+            $('#viewMessageContainer').show()
             $('#iframe').attr("srcdoc", emailBody);
             $("#iframe").on('load', function () {
-                $('#viewMessageContainer').show()
-
+                $("#iframe-loading").hide();
                 var body = this.contentWindow.document.body,
                     html = this.contentWindow.document.documentElement;
 
@@ -145,7 +149,7 @@ function openEmail(id) {
 
                 this.style.height = height + 'px';
             });
-
+            
             // $('#viewMessageContainer').css("height", height + "px")
             $('.message').fadeIn(fadeTimer);
             $('#list').fadeOut(fadeTimer);
