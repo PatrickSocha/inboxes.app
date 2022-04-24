@@ -248,11 +248,14 @@ function getViewValidateAction() {
     );
 
     $('body').on('keyup', '.actions-form', function (e) {
-        // backspace
-        if (e.keyCode === 8) {
-            $(this).prev().focus()
-        } else {
-            $(this).next().focus()
+        const keyPress = e.keyCode;
+        const backspace = 8 ;
+        const aZ09 = keyPress >= 48 && keyPress <= 90;
+
+        if (keyPress === backspace) {
+            $(this).prev().focus();
+        } else if (aZ09) {
+            $(this).next().focus();
         }
 
         let count = 0
@@ -268,7 +271,7 @@ function getViewValidateAction() {
     });
 
     $('body').on('paste', '.actions-form', function (e) {
-        var pasteData = e.originalEvent.clipboardData.getData('text').split("");
+        let pasteData = e.originalEvent.clipboardData.getData('text').split("");
         if (pasteData.length !== 5) {
             pasteData = void 0; // unset data, we shouldn't store it.
             return
