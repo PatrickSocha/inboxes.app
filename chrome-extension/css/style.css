@@ -6,6 +6,7 @@ body {
     margin: 0;
     padding: 0;
     height: 600px;
+    color: #464646;
 }
 
 .fw-container {
@@ -34,22 +35,21 @@ body {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0px;
+  bottom: 0;
   height: 60px;
   border-top: 1px solid #ccc;
   background-color: #fff;
   position: fixed;
-  margin: 0px 0px 0px 0px;
+  margin: 0 0 0 0;
   z-index: 999;
 }
 
 .footer > .footer-button {
   color: #ccc;
   height: 100%;
-  padding: 0px 0px 0px 0px;
+  padding: 0 0 0 0 !important;
   font-size: 30px;
-  margin: 0px 0px 0px 0px;
+  margin-left: 2.6666666666% !important; /* CSS :first-child fix for hidden divs */
 }
 
 .footer > .selected {
@@ -59,14 +59,9 @@ body {
   height: 2px;
   width: 50%;
   background-color: sandybrown;
-  margin: 0px 25% 0px 25%;
+  margin: 0 25% 0 25%;
   content: "";
 }
-
-/* remove me, maybe?*/
-/*.nav-disabled {*/
-/*  margin-top: 15px;*/
-/*}*/
 
 .left {
   float: left;
@@ -80,9 +75,8 @@ h1 {
     font-size: 60px;
 }
 
-.spacer {
-    margin-top: 50px;
-}
+.small-spacer { margin-top: 25px; }
+.spacer { margin-top: 50px; }
 
 .inbox-frame-first {
     /* border-top: 1px solid #ccc; */
@@ -98,7 +92,7 @@ h1 {
     border-width: 0px;
     border-bottom: 1px;
     border-style: solid;
-    border-color: #ccc;;
+    border-color: #ccc;
 }
 
 .new-email {
@@ -131,11 +125,12 @@ h1 {
 }
 
 /* settings page */
-#viewSettingsPage td {
-  padding: 10px;
+.settings-options-hover {
+    margin-top: 5px;
+    padding: 10px;
 }
-#viewSettingsPage a {
-  text-decoration: underline;
+.settings-options-hover:hover {
+    background-color: #fcfcfc;
 }
 
 .default-hide {
@@ -162,22 +157,63 @@ h1 {
 }
 
 a:link {
-    color: #000;
+    color: #464646;
     text-decoration: none;
 }
 a:visited {
-    color: #000;
+    color: #464646;
     text-decoration: none;
 }
 a:hover {
-    color: #000;
+    color: #464646;
     text-decoration: none;
 }
 a:active {
-    color: #000;
+    color: #464646;
     text-decoration: none;
 }
 
+/* Upgrade page */
+.upgrade ul {
+    margin-top: 10px;
+}
+.upgrade li {
+    margin-bottom: 0 !important;
+    color: #464646;
+}
+.upgrade h3 {
+    color: #464646;
+}
+.upgrade h4 {
+    color: #383e67;
+}
+.upgrade .button {
+    margin-top: 15px;
+    padding-top: 5px;
+    width: 200px;
+    height: 50px;
+    color: #fbfefe;
+    background-color: #415cf7;
+    border-color: #415cf7;
+}
+.upgrade .button > svg {
+    margin-top: 8px;
+    font-size: 20px;
+}
+.upgrade small {
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+/* SMS Page */
+.sms-contact {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background-color: #cccccc;
+    font-size: 40px;
+    color: #ffffff;
+}
 
 /* Text */
 
@@ -220,4 +256,4 @@ a:active {
 }
 
 /* Skeleton fix */
-.one.column,.one.columns{width:4.66666666667%}.two.columns{width:13.3333333333%}.three.columns{width:22%}.four.columns{width:33.3333333333%}.five.columns{width:39.3333333333%}.six.columns{width:50%}.seven.columns{width:56.6666666667%}.eight.columns{width:65.3333333333%}.nine.columns{width:74%}.ten.columns{width:82.6666666667%}.eleven.columns{width:91.3333333333%}.twelve.columns{width:100%;margin-left:0}
+/*.one.column,.one.columns{width:4.66666666667%}.two.columns{width:13.3333333333%}.three.columns{width:22%}.four.columns{width:33.3333333333%}.five.columns{width:39.3333333333%}.six.columns{width:50%}.seven.columns{width:56.6666666667%}.eight.columns{width:65.3333333333%}.nine.columns{width:74%}.ten.columns{width:82.6666666667%}.eleven.columns{width:91.3333333333%}.twelve.columns{width:100%;margin-left:0}*/

@@ -4,13 +4,16 @@
 <head>
     <title>Inboxes App | Create unlimited disposable emails.</title>
     <meta charset="UTF-8">
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
-    <link rel="stylesheet" href="css/skeleton.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" type="text/css" href="css/fontawesome.min.css">
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <link href="css/skeleton.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/components.css" rel="stylesheet">
+
     <script src="js/jquery.min.js"></script>
     <script src="js/inbox.js"></script>
+    <script src="js/solid.js"></script>
+    <script src="js/fontawesome.min.js"></script>
+
     <script src="js/confetti.js"></script>
 </head>
 
@@ -21,11 +24,11 @@
         <div class="twelve columns banner">
             <div class="row">
                 <div style="float: left;">
-                    <img src="assets/logo.svg" style="height: 40px; margin: 12px 0px 0px 0px;">
+                    <img src="assets/logo.svg" style="height: 40px; margin: 12px 0 0 0;">
                 </div>
                 <span class="right" style="float: right; margin-top: 15px;">
                     <div class="tooltip">
-                        <input type="text" class="disposableEmailForm" id="disposableEmailForm" value="">
+                        <input class="disposableEmailForm" id="disposableEmailForm" type="text" value="">
                         <div class="tooltiptext" id="myTooltip">Copy to clipboard</div>
                     </div>
                 </span>
@@ -43,81 +46,39 @@
     </div>
 
     <!-- Message container -->
-    <div style="min-height: 501px">
-        <!-- 100 nav + 501 (601px) to enable scrolling. Strange bug if < 500. -->
-        <div class="fw-container default-hide" id="viewMessageContainer">
-            <div class="twelve columns inbox-email inbox-frame-first message fade-in">
-
-                <div class="left" style="width: 90%">
-                    <h4 id="subject" style="display: inline;"></h4>
-                </div>
-                <div class="right" style="width: 10%;">
-                    <h2>
-                        <div id="closeEmail" class="closeEmail fas fa-times" class="display: inline-block"
-                            title="Close email"></div>
-                    </h2>
-                </div>
-                <hr style="clear: both" />
-
-                <div id="iframe-loading" class="text-center">
-                    <h2>
-                        <i class="fas fa-circle-notch fa-spin"></i>
-                    </h2>
-                </div>
-
-                <iframe id="iframe" srcdoc="" scrolling="no" height="100%" class="iframe"
-                    sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin">
-                </iframe>
-            </div>
-        </div>
-
+    <!-- 100 nav + 501 (601px) to enable scrolling. Strange bug if <= 500. -->
+    <div style="min-height: 501px; max-width: 450px;">
         <!-- Dynamic screens -->
         <div id="load"></div>
-
-        <!-- Inbox container -->
-        <div class="container" id="viewInboxContainer">
-
-            <div class="list" id="list"></div>
-            <div class="em pointer" style="display: none;">
-                <div class="twelve columns inbox-email inbox-frame-first">
-                    <div class="button delete-button">Delete Inbox</div>
-                    <div class="eight columns subject truncate" id="subject"></div>
-                    <div class="two columns" id="email"></div>
-                    <div class="two columns" id="date-time"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 
     <!-- Footer -->
     <div class="fw-container">
-        <div class="twelve columns footer">
+        <div class="twelve columns footer text-center pointer">
             <!-- unread button -->
-            <div class="six columns footer-button text-center pointer selected u-hide" id="viewUnreadButton">
-                <i class="far fa-envelope"></i>
+            <div class="three columns footer-button selected" id="viewUnreadButton">
+                <i class="fa fa-envelope"></i>
                 <div style="font-size: 10px; margin-top: -10px;">Unread</div>
-                <!-- <div class="selected-shadow"></div> -->
             </div>
 
             <!-- read button -->
-            <div class="six columns footer-button text-center pointer selected u-hide" id="viewReadButton">
-                <div class="far fa-envelope-open"></div>
+            <div class="three columns footer-button" id="viewReadButton" >
+                <div class="fa fa-envelope-open nav-disabled"></div>
                 <div style="font-size: 10px; margin-top: -10px;">Read</div>
-                <!-- <div class="selected-shadow"></div> -->
-            </div>
-
-            <!-- settings button -->
-            <div class="six columns footer-button pointer text-center" id="viewSettingsButton">
-                <i class="far fa-cog"></i>
-                <div style="font-size: 10px; margin-top: -10px;">Settings</div>
             </div>
 
             <!-- sms button -->
-            <!-- <div class="four columns footer-button text-center" title="SMS coming soon">
-                <i class="far fa-mobile-alt nav-disabled"></i>
-            </div> -->
+            <div class="three columns footer-button" id="viewSMSButton">
+                <i class="fa fa-mobile-alt nav-disabled"></i>
+                <div style="font-size: 10px; margin-top: -10px;">SMS</div>
+            </div>
+
+            <!-- settings button -->
+            <div class="three columns footer-button" id="viewSettingsButton">
+                <i class="fa fa-cog"></i>
+                <div style="font-size: 10px; margin-top: -10px;">Settings</div>
+            </div>
         </div>
     </div>
 </body>

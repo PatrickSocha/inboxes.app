@@ -1,0 +1,39 @@
+<div class="fw-container default-hide" id="viewMessageContainer">
+  <div class="twelve columns inbox-email inbox-frame-first message fade-in">
+
+    <div class="left" style="width: 90%">
+      <h4 id="subject" style="display: inline;"></h4>
+    </div>
+    <div class="right" style="width: 10%;">
+      <h2>
+        <div class="closeEmail fas fa-times" class="display: inline-block" id="closeEmail"
+             title="Close email"></div>
+      </h2>
+    </div>
+    <hr style="clear: both" />
+
+    <div class="text-center" id="iframe-loading">
+      <h2>
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </h2>
+    </div>
+
+    <iframe class="iframe" height="100%" id="iframe" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin" scrolling="no"
+            srcdoc="">
+    </iframe>
+  </div>
+</div>
+
+<!-- Inbox container -->
+<div id="viewInboxContainer">
+
+  <div class="list" id="list"></div>
+  <div class="em pointer" style="display: none;">
+    <div class="eleven columns offset-by-half inbox-email inbox-frame-first">
+      <div class="button delete-button">Delete Inbox</div>
+      <div class="twelve columns subject truncate" id="subject"></div>
+      <div class="two columns" id="email"></div>
+      <div class="two columns" id="date-time"></div>
+    </div>
+  </div>
+</div>

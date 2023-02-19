@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="twelve columns" style="padding: 10px;">
+        <h3>
+            <i class="fas fa-chevron-right"></i> &nbsp;
+            Use your own domain name
+        </h3>
+        <div class="twelve columns">
+            <!-- <div class="one columns offset-by-one">⚠️</div> -->
+            <div class="row">
+                <div class="twelve columns" style="padding: 0 20px 20px 20px;">
+                    Premium users who own a domain can use it in conjunction with Inboxes App, making your temporary
+                    emails less likely to be rejected.
+                </div>
+                <div class="twelve columns" style="padding: 0 20px 0 20px;">
+                    Add the following MX record to your desired domain:
+                    <pre><code>mx: ingress.inboxes.app &nbsp; &nbsp; priority: 10</code></pre>
+                </div>
+                <div class="twelve columns" style="padding: 0 20px 10px 20px;">
+                    Once added, enter the address you'll be using below, and we'll check it's correctly set up.
+                </div>
+            </div>
+        </div>
+
+        <div class="twelve columns" style="padding: 0 20px 75px 20px;">
+            <input class="u-full-width" id="emailForm" placeholder="mydomain.com" type="url">
+            <br />
+            <input class="button" id="addDomain" type="submit" value="Validate DNS & use this domain">
+        </div>
+
+    </div>
+</div>

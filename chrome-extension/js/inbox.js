@@ -1,7 +1,10 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.5';
+var version = '0.0.6';
 let key;
-var fadeTimer = 200;
+
+let subscribed = false; // if a user is a paid subscriber or not (req are verified back-end).
+let quickCopy; // used hold the state and change text in the quick copy text box.
+var fadeTimer = 200; // animation time in milliseconds.
 
 chrome.storage.sync.get(["key"], function (result) {
     if (result.key) {
@@ -25,13 +28,21 @@ function createAccount() {
 }
 
 function run() {
-    getNewEmail()
+    getEmailAddress()
     getInbox()
     getNews()
+    getSubscriptionStatus()
+
     incrementAppUsageCounter()
 }
 
-async function getNewEmail() {
+// EMAIL
+async function getEmailAddress() {
+    if (quickCopy === "email") {
+        return
+    }
+
+    $('#disposableEmailForm').fadeOut(fadeTimer);
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -40,18 +51,27 @@ async function getNewEmail() {
         url: domain + '/get_new_address',
         dataType: 'json',
         success: function (data) {
-            $('#disposableEmailForm').val(data.email);
+            $('#disposableEmailForm').val(data.email)
         }
     });
+    $('#disposableEmailForm').fadeIn(fadeTimer);
+
+    quickCopy = "email"
 }
 
 async function getInbox() {
     setNavigationState(
-        ['viewUnreadButton', 'viewSettingsButton'],
+        ['viewUnreadButton', 'viewReadButton', 'viewSMSButton', 'viewSettingsButton'],
         'viewUnreadButton',
         ['viewInboxContainer']
     );
 
+    // document ready required for getInbox() which is the first screen ever loaded.
+    $(document).ready(function() {
+        $("#load").load("views/viewEmailInbox.html").fadeIn(fadeTimer);
+    });
+
+    getEmailAddress();
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -71,11 +91,13 @@ async function getInbox() {
 
 async function getReadInbox() {
     setNavigationState(
-        ['viewReadButton', 'viewSettingsButton'],
+        ['viewUnreadButton', 'viewReadButton', 'viewSMSButton', 'viewSettingsButton'],
         'viewReadButton',
         ['viewInboxContainer']
     );
+    $("#load").load("views/viewEmailInbox.html").fadeIn(fadeTimer);
 
+    getEmailAddress();
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -131,7 +153,7 @@ function openEmail(id) {
         dataType: 'json',
         success: function (data) {
             var emailBody = "<base target=\"_blank\" />" + data.ParsedBody
-            emailBody = emailBody.replaceAll('<script','<script async').replaceAll('<img','<img loading="lazy"')
+            emailBody = emailBody.replaceAll('<script', '<script async').replaceAll('<img', '<img loading="lazy"')
 
             $('#subject').text(data.Subject);
             $('#to').text(data.To);
@@ -149,7 +171,7 @@ function openEmail(id) {
 
                 this.style.height = height + 'px';
             });
-            
+
             // $('#viewMessageContainer').css("height", height + "px")
             $('.message').fadeIn(fadeTimer);
             $('#list').fadeOut(fadeTimer);
@@ -158,11 +180,98 @@ function openEmail(id) {
     });
 }
 
+// Domain
+async function addDomain() {
+    setNavigationState(
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['viewInboxContainer']
+    );
 
+    if (subscribed === false) {
+        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        return
+    }
+
+    $("#load").load("views/viewAddDomain.html").fadeIn(fadeTimer);
+}
+
+// SMS
+async function getSMSInbox() {
+    setNavigationState(
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
+        'viewSMSButton',
+        ['viewInboxContainer']
+    );
+
+    if (subscribed === false) {
+        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        return
+    }
+    getPhoneNumber();
+
+    $("#load").load("views/viewSMSInbox.html").fadeIn(fadeTimer);
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/get_sms_inbox',
+        dataType: 'json',
+        success: function (data) {
+            if (data === null || data.length === 0) {
+                $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
+                return
+            }
+            populateSMSInbox(data);
+        }
+    });
+}
+
+function populateSMSInbox(data) {
+    $.each(data, function (index, element) {
+        const cl = ".sms-msg-" + index;
+        $('.sms-msg').clone()
+            .addClass("sms-msg-" + index)
+            .removeClass("sms-msg")
+            .appendTo(".sms-list")
+            .fadeIn(fadeTimer)
+
+
+        $(cl).on("click", function (e) {
+            // openSMSThread(element.ID)
+        });
+
+        $(cl + ' #from').text(element.from)
+        $(cl + ' #message').text(element.message)
+
+    });
+}
+
+async function getPhoneNumber() {
+    if (quickCopy === "phone") {
+        return
+    }
+    // $.ajax({
+    //     type: 'POST',
+    //     beforeSend: function (request) {
+    //         request.setRequestHeader("Authorization", key);
+    //     },
+    //     url: domain + '/get_new_address',
+    //     dataType: 'json',
+    //     success: function (data) {
+    //         $('#disposableEmailForm').val("some number").fadeIn(fadeTimer);
+    //     }
+    // });
+    $('#disposableEmailForm').val("some number").fadeIn(fadeTimer);
+
+    quickCopy = "phone"
+}
+
+// SETTINGS
 function updateEmail() {
     $("#load").load("views/verifying.html").fadeIn(fadeTimer);
     const email = $("#emailForm").val();
-
 
     $.ajax({
         type: 'POST',
@@ -179,10 +288,10 @@ function updateEmail() {
             $("#verifyingHeader").text("Check your email")
             $("#verifyingText").text("Enter your unique verification code in the settings page.")
         },
-        error: function () {
+        error: function (data, a) {
             $("#verifyingSpinner").remove()
-            $("#verifyingHeader").text("Invalid code")
-            $("#verifyingText").text("Check you entered the correct code and try again.")
+            $("#verifyingHeader").text("Error updating email")
+            $("#verifyingText").text(data.responseJSON.error)
         }
     });
 }
@@ -214,7 +323,7 @@ function verifyAccountEmail() {
                     toggleConfetti();
                 }, 1500)
             },
-            error: function () {
+            error: function (data) {
                 $("#verifyingSpinner").remove()
                 $("#verifyingHeader").text("Invalid code")
                 $("#verifyingText").text("Check you entered the correct code and try again.")
@@ -228,32 +337,42 @@ function verifyAccountEmail() {
 
 function getSettings() {
     setNavigationState(
-        ['viewReadButton', 'viewSettingsButton'],
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
         'viewSettingsButton',
         ['view']);
 
+    getEmailAddress();
     $("#load").load("views/viewSettings.html").fadeIn(fadeTimer);
+}
+
+function getAccountSettings() {
+    setNavigationState(
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['view']);
+
+    $("#load").load("views/viewAccountSettings.html").fadeIn(fadeTimer);
 }
 
 function getViewEditEmail() {
     setNavigationState(
-        ['viewReadButton', 'viewSettingsButton'],
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
         'viewSettingsButton',
         ['view']);
 
-    $("#load").load("views/viewEditEmail.html").fadeIn(fadeTimer);
+    $("#load").load("views/viewAttachEmail.html").fadeIn(fadeTimer);
 }
 
 function getViewValidateAction() {
     setNavigationState(
-        ['viewReadButton', 'viewSettingsButton'],
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
         'viewSettingsButton',
         ['view']
     );
 
     $('body').on('keyup', '.actions-form', function (e) {
         const keyPress = e.keyCode;
-        const backspace = 8 ;
+        const backspace = 8;
         const aZ09 = keyPress >= 48 && keyPress <= 90;
 
         if (keyPress === backspace) {
@@ -359,8 +478,41 @@ function getNews() {
     });
 }
 
+function getSubscriptionStatus() {
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/get_subscription_status',
+        dataType: 'json',
+        success: function (data) {
+            subscribed = data.subscribed
+        }
+    });
+}
+
+function upgradeAccount() {
+    $('#upgradeAccountButton').html('<i class="fa-solid fa-circle-notch fa-spin"></i>')
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        data: JSON.stringify({
+            "product": "yearly"
+        }),
+        url: domain + '/paddle_create_payment_link',
+        dataType: 'json',
+        success: function (data) {
+            chrome.tabs.create({url: data.link});
+            // return false;
+        }
+    });
+}
+
 function showNews(data) {
-    $('#news').show();
+    $('#news').show()
     $('#news-content').html(data.news);
 
     if (data.background_color)
@@ -375,11 +527,15 @@ $(document).ready(function () {
     // views
     $(document).delegate("#closeEmail", "click", closeEmail);
     $(document).delegate("#disposableEmailForm", "click", copyEmailAddress);
-    $(document).delegate("#viewReadButton", "click", getInbox);
-    $(document).delegate("#viewUnreadButton", "click", getReadInbox);
+    $(document).delegate("#viewAddDomain", "click", addDomain);
+    $(document).delegate("#viewReadButton", "click", getReadInbox);
+    $(document).delegate("#viewUnreadButton", "click", getInbox);
+    $(document).delegate("#viewSMSButton", "click", getSMSInbox);
     $(document).delegate("#viewSettingsButton", "click", getSettings);
+    $(document).delegate("#viewAccountSettings", "click", getAccountSettings);
     $(document).delegate("#viewEditEmail", "click", getViewEditEmail);
     $(document).delegate("#viewValidateAction", "click", getViewValidateAction);
+    $(document).delegate("#upgradeAccountButton", "click", upgradeAccount);
 
     // forms
     $(document).delegate("#updateEmail", "click", updateEmail);
@@ -403,8 +559,9 @@ function deleteKey(key) {
 
 // state control
 const setupViewState = {
-    viewSettingsButton: true,
-    viewUnreadButton: false,
+    viewUnreadButton: true,
+    viewSettingsButton: false,
+    viewSMSButton: false,
     viewReadButton: false,
 
     viewInboxContainer: true,
