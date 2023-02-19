@@ -49,4 +49,4 @@ Inboxes may revise these Terms from time to time, and the most current version w
 These Terms, together with our Privacy Policy, constitute the entire agreement between you and Inboxes regarding your use of the Service. If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions will remain in full force and effect. These Terms shall be governed by the laws of the United States and the state of California, without regard to conflict of law principles.
 
 ### Contact Us
-If you have any questions about these Terms or the Service, please contact us at support@inboxesapp.com.
+If you have any questions about these Terms or the Service, please contact us at inboxesapp.com
