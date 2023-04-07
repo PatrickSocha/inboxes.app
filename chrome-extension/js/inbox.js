@@ -1,10 +1,12 @@
 var domain = "https://api.inboxes.app";
 var version = '0.0.6';
-let key;
+const fadeTimer = 200; // animation time in milliseconds.
 
-let subscribed = false; // if a user is a paid subscriber or not (req are verified back-end).
-let quickCopy; // used hold the state and change text in the quick copy text box.
-var fadeTimer = 200; // animation time in milliseconds.
+let quickCopy; // used to hold the state and change text in the quick copy text box.
+let key;
+let userState = {
+    subscribed: false,
+}
 
 chrome.storage.sync.get(["key"], function (result) {
     if (result.key) {
@@ -42,7 +44,6 @@ async function getEmailAddress() {
         return
     }
 
-    $('#disposableEmailForm').fadeOut(fadeTimer);
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -54,7 +55,6 @@ async function getEmailAddress() {
             $('#disposableEmailForm').val(data.email)
         }
     });
-    $('#disposableEmailForm').fadeIn(fadeTimer);
 
     quickCopy = "email"
 }
@@ -188,12 +188,54 @@ async function addDomain() {
         ['viewInboxContainer']
     );
 
-    if (subscribed === false) {
+    if (userState.subscribed === false) {
         $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
         return
     }
 
     $("#load").load("views/viewAddDomain.html").fadeIn(fadeTimer);
+}
+
+async function addDomainProcess() {
+    setNavigationState(
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['viewInboxContainer']
+    );
+
+    if (userState.subscribed === false) {
+        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        return
+    }
+
+    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+
+    const customDomain = $("#addDomainForm").val();
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/create_domain',
+        dataType: 'json',
+        data: JSON.stringify({
+            "domain": customDomain,
+        }),
+        success: function (data) {
+            toggleConfetti();
+            $("#verifyingSpinner").remove()
+            $("#verifyingHeader").text("Domain added 👌")
+            $("#verifyingText").text("You'll need to use the already created email before the new one is used.")
+            setTimeout(function () {
+                toggleConfetti();
+            }, 1500)
+        },
+        error: function (data, a) {
+            $("#verifyingSpinner").remove()
+            $("#verifyingHeader").text("Error adding email")
+            $("#verifyingText").text(data.responseJSON.error)
+        }
+    });
 }
 
 // SMS
@@ -204,11 +246,18 @@ async function getSMSInbox() {
         ['viewInboxContainer']
     );
 
-    if (subscribed === false) {
+    if (userState.subscribed === false) {
         $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
         return
     }
-    getPhoneNumber();
+
+    getSubscriptionStatus();
+    if (userState.subscribed === true && !userState.phone_number) {
+        $("#load").load("views/viewAttachNumber.html").fadeIn(fadeTimer);
+        return
+    }
+
+    showPhoneNumber();
 
     $("#load").load("views/viewSMSInbox.html").fadeIn(fadeTimer);
     $.ajax({
@@ -248,24 +297,51 @@ function populateSMSInbox(data) {
     });
 }
 
-async function getPhoneNumber() {
+function showPhoneNumber() {
     if (quickCopy === "phone") {
         return
     }
-    // $.ajax({
-    //     type: 'POST',
-    //     beforeSend: function (request) {
-    //         request.setRequestHeader("Authorization", key);
-    //     },
-    //     url: domain + '/get_new_address',
-    //     dataType: 'json',
-    //     success: function (data) {
-    //         $('#disposableEmailForm').val("some number").fadeIn(fadeTimer);
-    //     }
-    // });
-    $('#disposableEmailForm').val("some number").fadeIn(fadeTimer);
-
     quickCopy = "phone"
+
+    $('#disposableEmailForm').val(userState.phone_number).fadeIn(fadeTimer);
+}
+
+async function addNumberProcess() {
+    setNavigationState(
+        ['viewReadButton', 'viewUnreadButton', 'viewSMSButton', 'viewSettingsButton'],
+        'viewSettingsButton',
+        ['viewInboxContainer']
+    );
+
+    if (userState.subscribed === false) {
+        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        return
+    }
+
+    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/create_phone_number',
+        dataType: 'json',
+        success: function (data) {
+            toggleConfetti();
+            $("#verifyingSpinner").remove()
+            $("#verifyingHeader").text("Phone number created 👌")
+            $("#verifyingText").text("Your new number is ", data.phone_number)
+            setTimeout(function () {
+                toggleConfetti();
+            }, 1500)
+        },
+        error: function (data, a) {
+            $("#verifyingSpinner").remove()
+            $("#verifyingHeader").text("Error creating number")
+            $("#verifyingText").text(data.responseJSON.error)
+        }
+    });
 }
 
 // SETTINGS
@@ -484,10 +560,10 @@ function getSubscriptionStatus() {
         beforeSend: function (request) {
             request.setRequestHeader("Authorization", key);
         },
-        url: domain + '/get_subscription_status',
+        url: domain + '/get_subscription',
         dataType: 'json',
         success: function (data) {
-            subscribed = data.subscribed
+            userState = data
         }
     });
 }
@@ -538,6 +614,10 @@ $(document).ready(function () {
     $(document).delegate("#upgradeAccountButton", "click", upgradeAccount);
 
     // forms
+    $(document).delegate("#updateAddDomain", "click", addDomain);
+    $(document).delegate("#updateAddDomainSubmit", "click", addDomainProcess);
+    $(document).delegate("#updateAddNumber", "click", getInbox);
+    $(document).delegate("#updateAddNumberSubmit", "click", addNumberProcess);
     $(document).delegate("#updateEmail", "click", updateEmail);
 });
 
