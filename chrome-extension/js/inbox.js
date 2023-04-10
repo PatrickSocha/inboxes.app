@@ -451,7 +451,6 @@ function getSettings() {
         ['view']);
 
     getEmailAddress();
-    userState.subscribed = false;
     $("#load").load("views/viewSettings.html", function() {
         if (userState.subscribed) {
             $(".settingsUpGradeButton").hide();
