@@ -215,6 +215,33 @@ a:active {
     color: #ffffff;
 }
 
+.sms-thread-info {
+    font-size: 12px;
+    color: #bdbcbc;
+    margin: 10px 0 -15px 0;
+}
+
+.chat-bubble {
+    position: relative;
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.chat-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -12px;
+    width: 15px;
+    height: 15px;
+    rotate: 45deg;
+    border-top: 15px solid #f0f0f0;
+}
+
+
 /* Text */
 
 .text-center {

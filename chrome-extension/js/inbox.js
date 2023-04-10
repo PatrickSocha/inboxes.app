@@ -286,15 +286,52 @@ function populateSMSInbox(data) {
             .appendTo(".sms-list")
             .fadeIn(fadeTimer)
 
-
         $(cl).on("click", function (e) {
-            // openSMSThread(element.ID)
+            openSMSThread(element.id)
         });
 
         $(cl + ' #from').text(element.from)
         $(cl + ' #message').text(element.message)
 
     });
+}
+
+async function openSMSThread(id) {
+    $("#load").load("views/viewSMSThread.html").fadeIn(fadeTimer);
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/get_sms_thread',
+        data: JSON.stringify({
+            "message_id": id,
+        }),
+        dataType: 'json',
+        success: function (data) {
+            if (data === null || data.length === 0) {
+                // $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
+                return
+            }
+            populateSMSThread(data);
+        }
+    });
+}
+
+function populateSMSThread(data) {
+    $('#from').text("From: " + data.from).fadeIn(fadeTimer)
+
+    $.each(data.messages, function (index, element) {
+        const cl = ".sms-msg-" + index;
+        $('.sms-msg').clone()
+            .addClass("sms-msg-" + index)
+            .removeClass("sms-msg")
+            .appendTo(".sms-list")
+            .fadeIn(fadeTimer)
+
+        $(cl + ' #message').text(element.message)
+    });
+    $('#sms-disclamer').text("Sending SMS not supported.").fadeIn(fadeTimer)
 }
 
 function showPhoneNumber() {
