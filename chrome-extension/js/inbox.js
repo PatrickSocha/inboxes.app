@@ -269,7 +269,7 @@ async function getSMSInbox() {
         dataType: 'json',
         success: function (data) {
             if (data === null || data.length === 0) {
-                $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
+                $("#load").load("views/viewSMSInboxZero.html").fadeIn(fadeTimer);
                 return
             }
             populateSMSInbox(data);
@@ -309,10 +309,6 @@ async function openSMSThread(id) {
         }),
         dataType: 'json',
         success: function (data) {
-            if (data === null || data.length === 0) {
-                // $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
-                return
-            }
             populateSMSThread(data);
         }
     });
@@ -455,7 +451,12 @@ function getSettings() {
         ['view']);
 
     getEmailAddress();
-    $("#load").load("views/viewSettings.html").fadeIn(fadeTimer);
+    userState.subscribed = false;
+    $("#load").load("views/viewSettings.html", function() {
+        if (userState.subscribed) {
+            $(".settingsUpGradeButton").hide();
+        }
+    }).fadeIn(fadeTimer);
 }
 
 function getAccountSettings() {
@@ -465,6 +466,7 @@ function getAccountSettings() {
         ['view']);
 
     $("#load").load("views/viewAccountSettings.html").fadeIn(fadeTimer);
+    // TODO: return manage subscription link
 }
 
 function getViewEditEmail() {
