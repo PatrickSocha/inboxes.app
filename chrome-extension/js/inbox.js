@@ -1,8 +1,9 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.6';
+var version = '0.0.7';
 const fadeTimer = 200; // animation time in milliseconds.
 
 let quickCopy; // used to hold the state and change text in the quick copy text box.
+let mp; // mixpanel
 let key;
 let userState = {
     subscribed: false,
@@ -29,13 +30,21 @@ function createAccount() {
     });
 }
 
-function run() {
+async function run() {
+    await getSubscriptionStatus().then(() => {
+        mixpanel.init('7005ab5e9dd1029929e5f9473d48bb53', {
+            api_host: 'https://api.inboxes.app/mixpanel',
+        });
+        mixpanel.identify(userState.user_id);
+        mp = mixpanel
+    })
+
     getEmailAddress()
     getInbox()
     getNews()
-    getSubscriptionStatus()
 
     incrementAppUsageCounter()
+    mp.track('Open: app');
 }
 
 // EMAIL
@@ -87,6 +96,7 @@ async function getInbox() {
             populateMessageList(data);
         }
     });
+    mp.track('email: get inbox');
 }
 
 async function getReadInbox() {
@@ -113,6 +123,7 @@ async function getReadInbox() {
             populateMessageList(data);
         }
     });
+    mp.track('email: get read inbox');
 }
 
 function populateMessageList(data) {
@@ -178,6 +189,7 @@ function openEmail(id) {
 
         }
     });
+    mp.track('email: open email');
 }
 
 // Domain
@@ -189,10 +201,12 @@ async function addDomain() {
     );
 
     if (userState.subscribed === false) {
+        mp.track('add domain: upgrade');
         $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
         return
     }
 
+    mp.track('addd domain');
     $("#load").load("views/viewAddDomain.html").fadeIn(fadeTimer);
 }
 
@@ -226,6 +240,7 @@ async function addDomainProcess() {
             $("#verifyingSpinner").remove()
             $("#verifyingHeader").text("Domain added 👌")
             $("#verifyingText").text("You'll need to use the already created email before the new one is used.")
+            mp.track('Add domain: success');
             setTimeout(function () {
                 toggleConfetti();
             }, 1500)
@@ -248,12 +263,14 @@ async function getSMSInbox() {
 
     if (userState.subscribed === false) {
         $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        mp.track('Sms: upgrade');
         return
     }
 
     getSubscriptionStatus();
     if (userState.subscribed === true && !userState.phone_number) {
         $("#load").load("views/viewAttachNumber.html").fadeIn(fadeTimer);
+        mp.track('Sms: create number');
         return
     }
 
@@ -275,6 +292,7 @@ async function getSMSInbox() {
             populateSMSInbox(data);
         }
     });
+    mp.track('Sms: get view inbox');
 }
 
 function populateSMSInbox(data) {
@@ -312,6 +330,7 @@ async function openSMSThread(id) {
             populateSMSThread(data);
         }
     });
+    mp.track('Sms: view thread');
 }
 
 function populateSMSThread(data) {
@@ -368,11 +387,13 @@ async function addNumberProcess() {
             setTimeout(function () {
                 toggleConfetti();
             }, 1500)
+            mp.track('Sms: Add number success');
         },
         error: function (data, a) {
             $("#verifyingSpinner").remove()
             $("#verifyingHeader").text("Error creating number")
             $("#verifyingText").text(data.responseJSON.error)
+            mp.track('Sms: Add number fail');
         }
     });
 }
@@ -396,6 +417,7 @@ function updateEmail() {
             $("#verifyingSpinner").remove()
             $("#verifyingHeader").text("Check your email")
             $("#verifyingText").text("Enter your unique verification code in the settings page.")
+            mp.track('Actions: email registered');
         },
         error: function (data, a) {
             $("#verifyingSpinner").remove()
@@ -428,6 +450,7 @@ function verifyAccountEmail() {
                 toggleConfetti();
                 $("#verifyingSpinner").remove()
                 $("#verifyingHeader").text("Email updated 👌")
+                mp.track('Actions: email verified');
                 setTimeout(function () {
                     toggleConfetti();
                 }, 1500)
@@ -456,6 +479,8 @@ function getSettings() {
             $(".settingsUpGradeButton").hide();
         }
     }).fadeIn(fadeTimer);
+
+    mp.track('Settings: view settings');
 }
 
 function getAccountSettings() {
@@ -466,6 +491,7 @@ function getAccountSettings() {
 
     $("#load").load("views/viewAccountSettings.html").fadeIn(fadeTimer);
     // TODO: return manage subscription link
+    mp.track('Settings: view user account settings');
 }
 
 function getViewEditEmail() {
@@ -475,6 +501,7 @@ function getViewEditEmail() {
         ['view']);
 
     $("#load").load("views/viewAttachEmail.html").fadeIn(fadeTimer);
+    mp.track('Settings: attach email page');
 }
 
 function getViewValidateAction() {
@@ -521,6 +548,7 @@ function getViewValidateAction() {
     });
 
     $("#load").load("views/viewValidateAction.html").fadeIn(fadeTimer);
+    mp.track('Actions: validate action');
 }
 
 function deleteInbox(email, elem) {
@@ -534,6 +562,7 @@ function deleteInbox(email, elem) {
         dataType: 'json',
         success: function (data) {
             $(elem).fadeOut(fadeTimer)
+            mp.track('email: deleted email');
         }
     });
 }
@@ -592,22 +621,26 @@ function getNews() {
     });
 }
 
-function getSubscriptionStatus() {
-    $.ajax({
-        type: 'POST',
-        beforeSend: function (request) {
-            request.setRequestHeader("Authorization", key);
-        },
-        url: domain + '/get_subscription',
-        dataType: 'json',
-        success: function (data) {
-            userState = data
-        }
-    });
+async function getSubscriptionStatus() {
+    return new Promise((resolve) => {
+        $.ajax({
+            type: 'POST',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", key);
+            },
+            url: domain + '/get_subscription',
+            dataType: 'json',
+            success: function (data) {
+                userState = data
+                return resolve(data)
+            }
+        });
+    })
 }
 
 function upgradeAccount() {
     $('#upgradeAccountButton').html('<i class="fa-solid fa-circle-notch fa-spin"></i>')
+    mp.track('Upgrade: button pressed');
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
