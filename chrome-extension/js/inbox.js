@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.7';
+var version = '0.0.8';
 const fadeTimer = 200; // animation time in milliseconds.
 
 let quickCopy; // used to hold the state and change text in the quick copy text box.
@@ -44,7 +44,6 @@ async function run() {
     getNews()
 
     incrementAppUsageCounter()
-    mp.track('Open: app');
 }
 
 // EMAIL
@@ -91,12 +90,24 @@ async function getInbox() {
         success: function (data) {
             if (data === null || data.length === 0) {
                 $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
+                checkIsPinned();
                 return
             }
             populateMessageList(data);
         }
     });
     mp.track('email: get inbox');
+}
+
+async function checkIsPinned(){
+    let userSettings = await chrome.action.getUserSettings();
+    if (!userSettings.isOnToolbar) {
+        $("#pin-extension").show();
+        mp.track('app: is not pinned');
+    } else {
+        $("#extension-pinned-explain-app").show();
+        mp.track('app: is pinned');
+    }
 }
 
 async function getReadInbox() {
