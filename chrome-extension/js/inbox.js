@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.8';
+var version = '0.0.9';
 const fadeTimer = 200; // animation time in milliseconds.
 
 let quickCopy; // used to hold the state and change text in the quick copy text box.
@@ -258,7 +258,7 @@ async function addDomainProcess() {
         },
         error: function (data, a) {
             $("#verifyingSpinner").remove()
-            $("#verifyingHeader").text("Error adding email")
+            $("#verifyingHeader").text("Error adding custom domain")
             $("#verifyingText").text(data.responseJSON.error)
         }
     });
