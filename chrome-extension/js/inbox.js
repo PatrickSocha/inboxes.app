@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.9';
+var version = '0.0.10';
 const fadeTimer = 200; // animation time in milliseconds.
 
 let quickCopy; // used to hold the state and change text in the quick copy text box.
@@ -24,8 +24,10 @@ function createAccount() {
         url: domain + '/create_account',
         dataType: 'json',
         success: function (data) {
-            setKey({ "key": data.key });
-            run();
+            setKey({ "key": data.key }).then(() => {
+                key = data.key
+                run();
+            });
         }
     });
 }
@@ -707,7 +709,7 @@ $(document).ready(function () {
 // Helpers
 //
 function setKey(keyObj) {
-    chrome.storage.sync.set(keyObj);
+    return chrome.storage.sync.set(keyObj);
 }
 function deleteKey(key) {
     chrome.storage.sync.remove(key, function () {
