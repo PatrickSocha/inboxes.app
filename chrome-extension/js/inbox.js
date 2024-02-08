@@ -103,8 +103,9 @@ async function getInbox() {
         dataType: 'json',
         success: function (data) {
             if (data === null || data.length === 0) {
-                $("#load").load("views/viewInboxZero.html").fadeIn(fadeTimer);
-                checkIsPinned();
+                $("#load").load("views/viewInboxZero.html", function() {
+                    checkIsPinned();
+                }).fadeIn(fadeTimer);
                 return
             }
             populateMessageList(data);
@@ -115,6 +116,7 @@ async function getInbox() {
 
 async function checkIsPinned(){
     let userSettings = await chrome.action.getUserSettings();
+    console.log(userSettings.isOnToolbar)
     if (!userSettings.isOnToolbar) {
         $("#pin-extension").show();
         mp.track('app: is not pinned');
