@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.10';
+var version = '0.0.11';
 const fadeTimer = 200; // animation time in milliseconds.
 
 let quickCopy; // used to hold the state and change text in the quick copy text box.
@@ -7,6 +7,7 @@ let mp; // mixpanel
 let key;
 let userState = {
     subscribed: false,
+    addressLimitExceeded: false,
 }
 
 chrome.storage.sync.get(["key"], function (result) {
@@ -63,6 +64,17 @@ async function getEmailAddress() {
         dataType: 'json',
         success: function (data) {
             $('#disposableEmailForm').val(data.email)
+        },
+        error: function (data, a) {
+            userState.addressLimitExceeded = true;
+            $('.news').hide();
+            $('#disposableEmailForm').val("Get more addresses...");
+            $('#myTooltip').text("Click to find out how");
+            $('#disposableEmailForm').css('cursor', 'pointer');
+            $('#disposableEmailForm').on("click", function (e) {
+                $("#load").load("views/viewUpgradeEmailLimitExceeded.html").fadeIn(fadeTimer);
+                mp.track('email limit exceeded: upgrade');
+            })
         }
     });
 
@@ -594,12 +606,14 @@ function closeEmail() {
 
 
 function copyEmailAddress() {
-    const copyText = document.getElementById("disposableEmailForm");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    document.execCommand("copy");
+    if (!userState.addressLimitExceeded) {
+        const copyText = document.getElementById("disposableEmailForm");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
 
-    $(".tooltiptext").text("Copied!");
+        $(".tooltiptext").text("Copied!");
+    }
 }
 
 function incrementAppUsageCounter() {
