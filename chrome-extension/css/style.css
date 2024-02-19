@@ -271,6 +271,12 @@ a:active {
   text-align: center;
 }
 
+/* Questionnaire */
+
+.questionnaireOptions, button {
+    margin: 5px;
+}
+
 
 /* Actions digits styling */
 .actions-form {
@@ -284,3 +290,8 @@ a:active {
 
 /* Skeleton fix */
 /*.one.column,.one.columns{width:4.66666666667%}.two.columns{width:13.3333333333%}.three.columns{width:22%}.four.columns{width:33.3333333333%}.five.columns{width:39.3333333333%}.six.columns{width:50%}.seven.columns{width:56.6666666667%}.eight.columns{width:65.3333333333%}.nine.columns{width:74%}.ten.columns{width:82.6666666667%}.eleven.columns{width:91.3333333333%}.twelve.columns{width:100%;margin-left:0}*/
+
+.button-secondary {
+    background-color: #f3f3f3;
+    color: #444;
+}

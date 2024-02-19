@@ -42,9 +42,13 @@ async function run() {
         mp = mixpanel
     })
 
-    getEmailAddress()
-    getInbox()
-    getNews()
+
+    getEmailAddress();
+    let surveyInProgress = await showSurvey()
+    if (!surveyInProgress) {
+        getNews();
+        await getInbox();
+    }
 
     incrementAppUsageCounter()
 }
@@ -116,7 +120,6 @@ async function getInbox() {
 
 async function checkIsPinned(){
     let userSettings = await chrome.action.getUserSettings();
-    console.log(userSettings.isOnToolbar)
     if (!userSettings.isOnToolbar) {
         $("#pin-extension").show();
         mp.track('app: is not pinned');
@@ -698,6 +701,91 @@ function showNews(data) {
         $('#news').css('background-image', 'url(' + data.image + ')');
 }
 
+// Questionnaire
+async function showSurvey() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: 'POST',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", key);
+            },
+            url: domain + '/get_questionnaire',
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                // There are no surveys to show, surveysInProgress is false
+                if (jqXHR.status === 204) {
+                    resolve(false);
+                    return
+                }
+
+                $("#load").load("views/survey.html", function() {
+                    userState.questionnaire = {
+                        questionnaire_id: data.id,
+                        question_id: data.questions[0].id
+                    }
+
+                    $('#questionnaireQuestion').text(data.questions[0].question);
+                    data.questions[0].options.forEach(function (option) {
+                        var button = $("<button>").addClass("button").attr("id", "questionnaireResponse").text(option);
+                        $("#questionnaireOptions").append(button);
+                    });
+
+                    // There is a survey in progress
+                    resolve(true);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching questionnaire:", error);
+                reject(error);
+            }
+        });
+    });
+}
+
+function questionnaireResponseSelected() {
+    $(".button").removeClass("button-secondary"); // Remove the selected class from all buttons
+    $(this).addClass("button-secondary"); // Add the selected class to the clicked button
+    var selectedOption = $(this).text();
+
+    userState.questionnaire.answer = selectedOption;
+
+    if (selectedOption.toLowerCase() === "Other".toLowerCase()) {
+        $("#questionnaireResponseCustomContainer").fadeIn(fadeTimer);
+    } else {
+        $("#questionnaireResponseCustomContainer").fadeOut(fadeTimer, function() {
+            $("#questionnaireResponseCustom").val("");
+        });
+    }
+}
+
+function questionnaireSubmit() {
+    var customResponse = $("#questionnaireResponseCustom")
+    if (customResponse.val() !== "") {
+        userState.questionnaire.answer = customResponse.val();
+    }
+
+    $.ajax({
+        type: 'POST',
+        beforeSend: function (request) {
+            request.setRequestHeader("Authorization", key);
+        },
+        url: domain + '/update_questionnaire_response',
+        dataType: 'json',
+        data: JSON.stringify({
+            id: userState.questionnaire.questionnaire_id,
+            answers: [
+                {
+                    question_id: userState.questionnaire.question_id,
+                    answer: userState.questionnaire.answer
+                }
+            ],
+        }),
+        success: function (data) {
+            getInbox();
+        }
+    });
+}
+
 // Listeners
 $(document).ready(function () {
     // views
@@ -719,6 +807,10 @@ $(document).ready(function () {
     $(document).delegate("#updateAddNumber", "click", getInbox);
     $(document).delegate("#updateAddNumberSubmit", "click", addNumberProcess);
     $(document).delegate("#updateEmail", "click", updateEmail);
+
+    // questionnaire
+    $(document).delegate("#questionnaireResponse", "click", questionnaireResponseSelected);
+    $(document).delegate("#questionnaireSubmit", "click", questionnaireSubmit);
 });
 
 // //
