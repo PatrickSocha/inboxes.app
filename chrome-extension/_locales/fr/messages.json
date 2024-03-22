@@ -1,0 +1,60 @@
+{
+  "name": {"message": "Boîtes de réception"},
+  "namechrome": {"message": "Boîtes de réception : Créer des adresses e-mail temporaires"},
+  "description": {"message": "Boîtes de réception vous permet de créer et de supprimer rapidement des adresses e-mail temporaires. Arrêtez les spams et les marketeurs dans leur élan avec des adresses e-mail jetables."},
+
+  "surveyTitle": {"message": "Juste une question rapide..."},
+
+  "accountSettingsTitle": {"message": "Paramètres du compte"},
+  "accountSettingsAttachEmail": {"message": "Attacher une adresse e-mail"},
+  "accountSettingsAttachEmailDescription": {"message": "Ajoutez une adresse e-mail pour vous reconnecter ultérieurement."},
+  "accountSettingsAddDomain": {"message": "Utiliser votre propre adresse e-mail"},
+  "accountSettingsAddDomainDescription": {"message": "L'utilisation de votre propre domaine signifie que vous avez moins de chances d'être rejeté lors de l'inscription sur des sites Web."},
+
+  "addDomainTitle": {"message": "Utiliser votre propre nom de domaine"},
+  "addDomainDescription": {"message": "Les utilisateurs Premium qui possèdent un domaine peuvent l'utiliser en conjonction avec l'application Boîtes de réception, ce qui rend vos e-mails temporaires moins susceptibles d'être rejetés."},
+  "addDomainOnceAdded": {"message": "Une fois ajouté, saisissez l'adresse que vous utiliserez ci-dessous, et nous vérifierons qu'elle est correctement configurée."},
+
+  "inboxZeroTitle": {"message": "Aucun nouvel e-mail \t \uD83C\uDF89"},
+  "inboxZeroBody": {"message": "<strong>Pour commencer :</strong> Utilisez l'e-mail fourni ci-dessus lors de votre inscription sur des sites Web que vous ne souhaitez pas voir dans votre boîte de réception habituelle. Ils commenceront à apparaître ici, et lorsque vous en aurez terminé avec eux, appuyez sur le bouton 'Supprimer l'adresse'. Vous n'entendrez plus jamais parler d'eux !"},
+  "inboxZeroEnablePin": {"message": "Épinglez l'extension pour être notifié des nouveaux e-mails"},
+
+  "attachEmailTitle": {"message": "Mettre à jour votre adresse e-mail"},
+  "attachEmailBody": {"message": "Nous n'exigeons pas d'adresse e-mail pour utiliser l'application Boîtes de réception, mais nous en aurons besoin si vous souhaitez vous reconnecter à ce compte ou restaurer des fonctionnalités payantes."},
+
+  "attachNumberTitle": {"message": "Revendiquez votre numéro de téléphone"},
+  "attachNumberBodyExplain": {"message": "Les comptes Premium bénéficient de leur propre numéro de SMS entrant uniquement, ce qui vous permet de protéger votre numéro de téléphone personnel."},
+  "attachNumberBodyClaim": {"message": "Pour réclamer votre numéro de téléphone unique, cliquez sur le bouton ci-dessous :"},
+
+  "emptyUnreadTitle": {"message": "Vider le dossier de lecture &nbsp; \uD83D\uDC40"},
+
+  "settingsTitle": {"message": "Paramètres"},
+  "settingsAccountSettings": {"message": "Paramètres du compte"},
+  "settingsAccountSettingsDesc": {"message": "Vérifiez votre e-mail, consultez les détails de facturation et plus encore..."},
+  "settingsVerificationCode": {"message": "Entrer un code de vérification"},
+  "settingsVerificationCodeDesc": {"message": "Entrez votre code de vérification à 5 chiffres."},
+  "settingsUpgrade": {"message": "Mettre à niveau le compte (£29.99/an)"},
+  "settingsUpgradeDesc": {"message": "Utilisez votre propre nom de domaine + obtenez un numéro de SMS entrant uniquement."},
+  "settingsSupport": {"message": "Contacter le support"},
+  "settingsSupportDesc": {"message": "Envoyez-nous un e-mail et nous vous répondrons."},
+
+  "smsInboxZero": {"message": "Vous n'avez aucun message SMS &nbsp;\uD83D\uDCF2"},
+  "smsInboxZeroDesc": {"message": "Commencez à utiliser votre nouveau numéro en ligne et protégez votre téléphone personnel des distractions indésirables."},
+
+  "upgradeTitle": {"message": "Passer à Premium"},
+  "upgradeReasons": {"message": "Les utilisateurs qui passent à Premium bénéficient des avantages suivants:\n    <ul>\n        <li>Créer jusqu'à 50 adresses par jour</li>\n        <li>Utilisez votre propre nom de domaine</li>\n        <li>Votre propre numéro de SMS entrant uniquement</li>\n    </ul>"},
+  "upgradeCadence": {"message": "an"},
+  "upgradePaddle": {"message": "Les paiements sont traités de manière sécurisée via Paddle"},
+  "limitExceededTitle": {"message": "Libérez les fonctionnalités Premium"},
+  "limitExceededReasons": {"message": "    Les utilisateurs avancés qui passent à Premium bénéficient des avantages suivants :\n    <ul>\n        <li>Passer de 3 à 50 adresses e-mail par jour</li>\n        <li>Utilisez votre propre nom de domaine</li>\n        <li>Votre propre numéro de SMS entrant uniquement</li>\n        <li>Soutenez un développeur indépendant</li>\n    </ul>"},
+
+  "validateTitle": {"message": "Entrez un code de validation"},
+  "validateDesc": {"message": "Pour vérifier un changement sur votre compte, veuillez entrer le code à 5 chiffres envoyé à votre e-mail ci-dessous."},
+
+  "buttonDeleteEmailAddress": {"message": "Supprimer l'adresse"},
+  "buttonAttachNumber": {"message": "Générer un numéro de mobile"},
+  "buttonSendVerificationCode": {"message": "Envoyer le code de vérification"},
+  "buttonValidateDNS": {"message": "Valider le DNS et utiliser ce domaine"},
+  "buttonUpgradeNow": {"message": "Passer à Premium maintenant"},
+  "buttonSubmit": {"message": "Soumettre"}
+}

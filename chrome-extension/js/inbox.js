@@ -53,6 +53,36 @@ async function run() {
     incrementAppUsageCounter()
 }
 
+async function loadScreen(screen, fn) {
+    function isContentLoaded() {
+        return $("#load").children().length > 0;
+    }
+    const observerConfig = { childList: true };
+    let contentLoadedPromise = new Promise(resolve => {
+        let observer = new MutationObserver((mutationsList, observer) => {
+            if (isContentLoaded()) {
+                observer.disconnect();
+                resolve();
+            }
+        });
+        observer.observe(document.getElementById('load'), observerConfig);
+    });
+
+    $("#load").load(screen, function() {
+        $("#load [data-i18n]").each(function() {
+            let i18n = $(this).attr('data-i18n');
+            $(this).html(chrome.i18n.getMessage(i18n));
+        });
+    });
+
+    await contentLoadedPromise;
+    if (fn !== undefined) {
+        fn();
+    }
+    $("#load").fadeIn(fadeTimer);
+}
+
+
 // EMAIL
 async function getEmailAddress() {
     if (quickCopy === "email") {
@@ -76,7 +106,7 @@ async function getEmailAddress() {
             $('#myTooltip').text("Click to find out how");
             $('#disposableEmailForm').css('cursor', 'pointer');
             $('#disposableEmailForm').on("click", function (e) {
-                $("#load").load("views/viewUpgradeEmailLimitExceeded.html").fadeIn(fadeTimer);
+                loadScreen("views/viewUpgradeEmailLimitExceeded.html")
                 mp.track('email limit exceeded: upgrade');
             })
         }
@@ -94,7 +124,7 @@ async function getInbox() {
 
     // document ready required for getInbox() which is the first screen ever loaded.
     $(document).ready(function() {
-        $("#load").load("views/viewEmailInbox.html").fadeIn(fadeTimer);
+        loadScreen("views/viewEmailInbox.html")
     });
 
     getEmailAddress();
@@ -107,9 +137,9 @@ async function getInbox() {
         dataType: 'json',
         success: function (data) {
             if (data === null || data.length === 0) {
-                $("#load").load("views/viewInboxZero.html", function() {
+                loadScreen("views/viewInboxZero.html", function() {
                     checkIsPinned();
-                }).fadeIn(fadeTimer);
+                });
                 return
             }
             populateMessageList(data);
@@ -121,10 +151,10 @@ async function getInbox() {
 async function checkIsPinned(){
     let userSettings = await chrome.action.getUserSettings();
     if (!userSettings.isOnToolbar) {
-        $("#pin-extension").show();
+        $("#pin-extension").fadeIn(fadeTimer);
         mp.track('app: is not pinned');
     } else {
-        $("#extension-pinned-explain-app").show();
+        $("#extension-pinned-explain-app").fadeIn(fadeTimer);
         mp.track('app: is pinned');
     }
 }
@@ -135,7 +165,7 @@ async function getReadInbox() {
         'viewReadButton',
         ['viewInboxContainer']
     );
-    $("#load").load("views/viewEmailInbox.html").fadeIn(fadeTimer);
+    loadScreen("views/viewEmailInbox.html")
 
     getEmailAddress();
     $.ajax({
@@ -147,7 +177,7 @@ async function getReadInbox() {
         dataType: 'json',
         success: function (data) {
             if (data === null || data.length === 0) {
-                $("#load").load("views/viewEmptyUnread.html").fadeIn(fadeTimer);
+                loadScreen("views/viewEmptyUnread.html")
                 return
             }
             populateMessageList(data);
@@ -232,12 +262,12 @@ async function addDomain() {
 
     if (userState.subscribed === false) {
         mp.track('add domain: upgrade');
-        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        loadScreen("views/viewUpgrade.html")
         return
     }
 
     mp.track('addd domain');
-    $("#load").load("views/viewAddDomain.html").fadeIn(fadeTimer);
+    loadScreen("views/viewAddDomain.html")
 }
 
 async function addDomainProcess() {
@@ -248,11 +278,11 @@ async function addDomainProcess() {
     );
 
     if (userState.subscribed === false) {
-        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        loadScreen("views/viewUpgrade.html")
         return
     }
 
-    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+    loadScreen("views/verifying.html")
 
     const customDomain = $("#addDomainForm").val();
     $.ajax({
@@ -292,21 +322,21 @@ async function getSMSInbox() {
     );
 
     if (userState.subscribed === false) {
-        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        loadScreen("views/viewUpgrade.html")
         mp.track('Sms: upgrade');
         return
     }
 
     getSubscriptionStatus();
     if (userState.subscribed === true && !userState.phone_number) {
-        $("#load").load("views/viewAttachNumber.html").fadeIn(fadeTimer);
+        loadScreen("views/viewAttachNumber.html")
         mp.track('Sms: create number');
         return
     }
 
     showPhoneNumber();
 
-    $("#load").load("views/viewSMSInbox.html").fadeIn(fadeTimer);
+    loadScreen("views/viewSMSInbox.html")
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -316,7 +346,7 @@ async function getSMSInbox() {
         dataType: 'json',
         success: function (data) {
             if (data === null || data.length === 0) {
-                $("#load").load("views/viewSMSInboxZero.html").fadeIn(fadeTimer);
+                loadScreen("views/viewSMSInboxZero.html")
                 return
             }
             populateSMSInbox(data);
@@ -345,7 +375,7 @@ function populateSMSInbox(data) {
 }
 
 async function openSMSThread(id) {
-    $("#load").load("views/viewSMSThread.html").fadeIn(fadeTimer);
+    loadScreen("views/viewSMSThread.html")
     $.ajax({
         type: 'POST',
         beforeSend: function (request) {
@@ -396,11 +426,11 @@ async function addNumberProcess() {
     );
 
     if (userState.subscribed === false) {
-        $("#load").load("views/viewUpgrade.html").fadeIn(fadeTimer);
+        loadScreen("views/viewUpgrade.html")
         return
     }
 
-    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+    loadScreen("views/verifying.html")
 
     $.ajax({
         type: 'POST',
@@ -430,7 +460,7 @@ async function addNumberProcess() {
 
 // SETTINGS
 function updateEmail() {
-    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+    loadScreen("views/verifying.html")
     const email = $("#emailForm").val();
 
     $.ajax({
@@ -458,7 +488,7 @@ function updateEmail() {
 }
 
 function verifyAccountEmail() {
-    $("#load").load("views/verifying.html").fadeIn(fadeTimer);
+    loadScreen("views/verifying.html")
 
     const codeParts = [];
     for (let i = 0; i < 5; i++) {
@@ -504,11 +534,11 @@ function getSettings() {
         ['view']);
 
     getEmailAddress();
-    $("#load").load("views/viewSettings.html", function() {
+    loadScreen("views/viewSettings.html", function() {
         if (userState.subscribed) {
             $(".settingsUpGradeButton").hide();
         }
-    }).fadeIn(fadeTimer);
+    })
 
     mp.track('Settings: view settings');
 }
@@ -519,7 +549,7 @@ function getAccountSettings() {
         'viewSettingsButton',
         ['view']);
 
-    $("#load").load("views/viewAccountSettings.html").fadeIn(fadeTimer);
+    loadScreen("views/viewAccountSettings.html")
     // TODO: return manage subscription link
     mp.track('Settings: view user account settings');
 }
@@ -530,7 +560,7 @@ function getViewEditEmail() {
         'viewSettingsButton',
         ['view']);
 
-    $("#load").load("views/viewAttachEmail.html").fadeIn(fadeTimer);
+    loadScreen("views/viewAttachEmail.html")
     mp.track('Settings: attach email page');
 }
 
@@ -577,7 +607,7 @@ function getViewValidateAction() {
         }
     });
 
-    $("#load").load("views/viewValidateAction.html").fadeIn(fadeTimer);
+    loadScreen("views/viewValidateAction.html")
     mp.track('Actions: validate action');
 }
 
@@ -718,7 +748,7 @@ async function showSurvey() {
                     return
                 }
 
-                $("#load").load("views/survey.html", function() {
+                loadScreen("views/survey.html", function() {
                     userState.questionnaire = {
                         questionnaire_id: data.id,
                         question_id: data.questions[0].id
@@ -732,7 +762,7 @@ async function showSurvey() {
 
                     // There is a survey in progress
                     resolve(true);
-                });
+                })
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching questionnaire:", error);
