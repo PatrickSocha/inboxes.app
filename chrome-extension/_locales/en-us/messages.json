@@ -1,0 +1,60 @@
+{
+  "name": {"message": "Inboxes"},
+  "namechrome": {"message": "Inboxes: Create Temporary Email Addresses"},
+  "description": {"message": "Inboxes lets you quickly create & delete temporary email addresses. Stop junk & marketers in their tracks with disposable email addresses"},
+
+  "surveyTitle": {"message": "Just a quick question..."},
+
+  "accountSettingsTitle": {"message": "Account Settings"},
+  "accountSettingsAttachEmail": {"message": "Attach an email"},
+  "accountSettingsAttachEmailDescription": {"message": "Add an email to log back in at a later date."},
+  "accountSettingsAddDomain": {"message": "Use your own email address"},
+  "accountSettingsAddDomainDescription": {"message": "Using your own domain means you're less likely to get rejected when signing up to websites."},
+
+  "addDomainTitle": {"message": "Use your own domain name"},
+  "addDomainDescription": {"message": "Premium users who own a domain can use it in conjunction with the Inboxes App, making your temporary emails less likely to be rejected."},
+  "addDomainOnceAdded": {"message": "Once added, enter the address you'll be using below, and we'll check if it's correctly set up."},
+
+  "inboxZeroTitle": {"message": "No new emails \t \uD83C\uDF89"},
+  "inboxZeroBody": {"message": "<strong>To get started: </strong>Use the email provided above when signing up for websites you don't want in your normal inbox. They'll start appearing here, and when you're done with them, hit the 'delete inbox' button. You'll never hear from them again!"},
+  "inboxZeroEnablePin": {"message": "Pin the extension to get notified of new emails"},
+
+  "attachEmailTitle": {"message": "Update your email"},
+  "attachEmailBody": {"message": "We don't require an email to use the Inboxes App, but we'll need it if you ever want to log back in to this account or restore paid features."},
+
+  "attachNumberTitle": {"message": "Claim your phone number"},
+  "attachNumberBodyExplain": {"message": "Premium accounts get their own private inbound-only SMS number, allowing you to keep your personal phone number private."},
+  "attachNumberBodyClaim": {"message": "To claim your unique phone number, click the button below:"},
+
+  "emptyUnreadTitle": {"message": "Empty read folder &nbsp; \uD83D\uDC40"},
+
+  "settingsTitle": {"message": "Settings"},
+  "settingsAccountSettings": {"message": "Account Settings"},
+  "settingsAccountSettingsDesc": {"message": "Verify your email, view billing details and more..."},
+  "settingsVerificationCode": {"message": "Enter a verification code"},
+  "settingsVerificationCodeDesc": {"message": "Enter your 5-digit verification code."},
+  "settingsUpgrade": {"message": "Upgrade Account ($29.99/year)"},
+  "settingsUpgradeDesc": {"message": "Use your own domain name + get an inbound-only SMS number."},
+  "settingsSupport": {"message": "Contact support"},
+  "settingsSupportDesc": {"message": "Drop us an email and we'll get back to you."},
+
+  "smsInboxZero": {"message": "You have no SMS messages &nbsp;\uD83D\uDCF2"},
+  "smsInboxZeroDesc": {"message": "Start using your new number online and protect your personal phone from unwanted distractions."},
+
+  "upgradeTitle": {"message": "Upgrade to Premium"},
+  "upgradeReasons": {"message": "Users who upgrade get the following benefits:\n    <ul>\n        <li>Create up to 50 addresses a day</li>\n        <li>Use your own domain name</li>\n        <li>Your own private inbound-only SMS number</li>\n    </ul>"},
+  "upgradeCadence": {"message": "year"},
+  "upgradePaddle": {"message": "Payments are securely processed through Paddle"},
+  "limitExceededTitle": {"message": "Unlock Premium Features"},
+  "limitExceededReasons": {"message": "    Power users who upgrade get the following benefits:\n    <ul>\n        <li>Go from 3 to 50 email addresses a day</li>\n        <li>Use your own domain name</li>\n        <li>Your own private inbound-only SMS number</li>\n        <li>Support an independent developer</li>\n    </ul>"},
+
+  "validateTitle": {"message": "Enter a validation code"},
+  "validateDesc": {"message": "To verify a change to your account, please enter the 5-digit code sent to your email below."},
+
+  "buttonDeleteEmailAddress": {"message": "Delete address"},
+  "buttonAttachNumber": {"message": "Generate mobile number"},
+  "buttonSendVerificationCode": {"message": "Send verification code"},
+  "buttonValidateDNS": {"message": "Validate DNS & use this domain"},
+  "buttonUpgradeNow": {"message": "Upgrade now"},
+  "buttonSubmit": {"message": "Submit"}
+}
