@@ -1,5 +1,5 @@
 var domain = "https://api.inboxes.app";
-var version = '0.0.12';
+var version = '0.0.13';
 const fadeTimer = 200; // animation time in milliseconds.
 
 let quickCopy; // used to hold the state and change text in the quick copy text box.
