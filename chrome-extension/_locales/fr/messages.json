@@ -1,7 +1,7 @@
 {
-  "name": {"message": "Boîtes de réception"},
-  "namechrome": {"message": "Boîtes de réception : Créer des adresses e-mail temporaires"},
-  "description": {"message": "Boîtes de réception vous permet de créer et de supprimer rapidement des adresses e-mail temporaires. Arrêtez les spams et les marketeurs dans leur élan avec des adresses e-mail jetables."},
+  "name": {"message": "Inboxes"},
+  "namechrome": {"message": "Inboxes : Créer des adresses e-mail temporaires"},
+  "description": {"message": "Inboxes vous permet de créer et de supprimer rapidement des adresses e-mail temporaires. Arrêtez les spams et les marketeurs!"},
 
   "surveyTitle": {"message": "Juste une question rapide..."},
 
@@ -12,7 +12,7 @@
   "accountSettingsAddDomainDescription": {"message": "L'utilisation de votre propre domaine signifie que vous avez moins de chances d'être rejeté lors de l'inscription sur des sites Web."},
 
   "addDomainTitle": {"message": "Utiliser votre propre nom de domaine"},
-  "addDomainDescription": {"message": "Les utilisateurs Premium qui possèdent un domaine peuvent l'utiliser en conjonction avec l'application Boîtes de réception, ce qui rend vos e-mails temporaires moins susceptibles d'être rejetés."},
+  "addDomainDescription": {"message": "Les utilisateurs Premium qui possèdent un domaine peuvent l'utiliser en conjonction avec l'application Inboxes, ce qui rend vos e-mails temporaires moins susceptibles d'être rejetés."},
   "addDomainOnceAdded": {"message": "Une fois ajouté, saisissez l'adresse que vous utiliserez ci-dessous, et nous vérifierons qu'elle est correctement configurée."},
 
   "inboxZeroTitle": {"message": "Aucun nouvel e-mail \t \uD83C\uDF89"},
@@ -20,7 +20,7 @@
   "inboxZeroEnablePin": {"message": "Épinglez l'extension pour être notifié des nouveaux e-mails"},
 
   "attachEmailTitle": {"message": "Mettre à jour votre adresse e-mail"},
-  "attachEmailBody": {"message": "Nous n'exigeons pas d'adresse e-mail pour utiliser l'application Boîtes de réception, mais nous en aurons besoin si vous souhaitez vous reconnecter à ce compte ou restaurer des fonctionnalités payantes."},
+  "attachEmailBody": {"message": "Nous n'exigeons pas d'adresse e-mail pour utiliser l'application Inboxes, mais nous en aurons besoin si vous souhaitez vous reconnecter à ce compte ou restaurer des fonctionnalités payantes."},
 
   "attachNumberTitle": {"message": "Revendiquez votre numéro de téléphone"},
   "attachNumberBodyExplain": {"message": "Les comptes Premium bénéficient de leur propre numéro de SMS entrant uniquement, ce qui vous permet de protéger votre numéro de téléphone personnel."},
@@ -54,7 +54,7 @@
   "buttonDeleteEmailAddress": {"message": "Supprimer l'adresse"},
   "buttonAttachNumber": {"message": "Générer un numéro de mobile"},
   "buttonSendVerificationCode": {"message": "Envoyer le code de vérification"},
-  "buttonValidateDNS": {"message": "Valider le DNS et utiliser ce domaine"},
+  "buttonValidateDNS": {"message": "Valider le DNS"},
   "buttonUpgradeNow": {"message": "Passer à Premium maintenant"},
-  "buttonSubmit": {"message": "Soumettre"}
+  "buttonSubmit": {"message": "Envoyer"}
 }
